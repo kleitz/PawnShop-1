@@ -6,15 +6,29 @@
 <head runat="server">
     <script type="text/javascript" src="js/jquery.js"></script>
     <script src="js/uikit.min.js" type="text/javascript"></script>
-    <script src="Scripts/jquery.validate.js"></script>
+    <script src="js/jquery.validate.js"></script>
     <script src="js/components/notify.min.js"></script>
     <link href="css/uikit.min.css" rel="stylesheet" type="text/css" />
     <link href="css/GridStyle.css" rel="stylesheet" />
     <title>::ระบบจัดการทรัพย์หลุด::</title>
-
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
     <script type="text/javascript">
 
         $(document).ready(function () {
+
+            $("#txtTicketNumber").keydown(function (e) {
+                if (e.which == 17 || e.which == 74) {
+                    e.preventDefault();
+                } else {
+                    console.log(e.which);
+                }
+            });
+
+            $('#txtTicketNumber').focus();
             $('#totalQty').val(0);
             $('#totalWeight').val(0);
             $('#totalAmt').val(0);
@@ -28,20 +42,26 @@
                 $('#setEdit').hide();
             });
 
-            //$('#form1').validate({
-            //    rules: {
+            $('#form1').validate({
+                rules: {
+                    DropdownCategory: {
+                        required: true
+                    },
+                    DropdownEvent: {
+                        required: true
+                    }
+                },
+                messages: {
+                    DropdownCategory: "กรุณาเลือกประเภทชุดก่อน",
+                    DropdownEvent: "กรุณาเลือกกิจกรรม"
+                },
+                submitHandler: function (form) {
+                    alert("xxx");
+                    //AddSet();
+                    return false;
+                }
 
-            //    },
-            //    submitHandler: function (form) {
-            //        alert('xxx');
-            //        return false; 
-            //    }
-            //});
-            
-            //jQuery.validator.addMethod('selectcheck', function (value) {
-            //    return (value != '0');
-            //}, "year required");
-
+            });
         });
         
         function loadProductType() {
@@ -54,7 +74,7 @@
                 dataType: "json",
                 success: function (data) {
                     var ddlCategory = $('#dropdowCate');
-                    ddlCategory.empty().append('<option selected="selected" value="0">กรุณาเลือกประเภท</option>');
+                    ddlCategory.empty().append('<option selected="selected" value="">กรุณาเลือกประเภท</option>');
                     $.each(data, function (key, value) {
                         ddlCategory.append($("<option></option>").val(value.ProductTypeId).html(value.Name));
                     });
@@ -74,7 +94,7 @@
                 dataType: "json",
                 success: function (data) {
                     var ddlEvent = $('#ddlEvent');
-                    ddlEvent.empty().append('<option selected="selected" value="0">กรุณาเลือกกิจกรรม</option>');
+                    ddlEvent.empty().append('<option selected="selected" value="">กรุณาเลือกกิจกรรม</option>');
                     $.each(data, function (key, value) {
                         ddlEvent.append($("<option></option>").val(value.EventID).html(value.Detail));
                     });
@@ -100,6 +120,19 @@
         function alertModalSelect() {
             AlertModal("modalSelectBefore");
         }
+
+        function AddTicketFromScanner(event) {
+            var x = event.which || event.keyCode;
+            var message = "";
+            if (x == 13) {
+                if ($("#txtTicketNumber").val().length > 0) {
+                    AddTicket();
+                } else {
+                    $('#txtTicketNumber').focus();
+                }
+            }
+        }
+
 
         function AddTicket() {
             var ticketId = $('#txtTicketNumber').val().trim();
@@ -172,6 +205,7 @@
                         $('#txtTicketNumber').val("");
                     } else {
                         $('#lblAlert').text("ไม่พบข้อมูล");
+                        $('#txtTicketNumber').val("");
                         AlertModal("modalAlertSuccess");
                     }
                 }
@@ -417,12 +451,12 @@
     </script>
 </head>
 <body>
-    <form id="form1" runat="server">
-        <asp:HiddenField ID="hddBranch" runat="server" />
+    <form id="form1" name="form1" >
+<%--        <asp:HiddenField ID="hddBranch" runat="server" />
         <asp:HiddenField ID="hddMonth" runat="server" />
-        <asp:HiddenField ID="hddYear" runat="server" />
+        <asp:HiddenField ID="hddYear" runat="server" />--%>
 
-        <asp:Panel ID="panelInsertSet" runat="server" Visible="true">
+<%--        <asp:Panel ID="panelInsertSet" runat="server" Visible="true">--%>
             <div class="uk-form">
                 <table class="uk-table uk-table-condensed">
                     <tr>
@@ -430,8 +464,8 @@
                             <b>เลขตั๋ว</b>
                         </td>
                         <td>
-                            <input type="text" id="txtTicketNumber" />
-                            <input type="button" value="add" class="uk-button uk-button-success" onclick="AddTicket()" style="color:#ffffff" />             
+                            <input type="text" id="txtTicketNumber" onkeypress="AddTicketFromScanner(event)" />
+                            <%--<input type="button" value="add" class="uk-button uk-button-success" onclick="AddTicket()" style="color:#ffffff" />--%>             
                         </td>
                     </tr>
                     <tr>
@@ -453,7 +487,11 @@
                     <tr>
                         <td></td>
                         <td>
-                            <input type="button" value="จัดชุด" class="uk-button uk-button-success" onclick="AddSet()" style="color: #ffffff" />
+                            <%--<input type="submit" value="จัดชุด" class="uk-button uk-button-success" onclick="AddSet()" style="color: #ffffff" />--%>
+<%--                            <button type="submit" class="uk-button uk-button-success"  style="color: #ffffff">จัดชุด</button>--%>
+
+                            <button id="btnAddSet" class="uk-button uk-button-success" type="submit" style="color: #ffffff" >จัดชุด</button>    
+   
                         </td>
                     </tr>
                 </table>
@@ -494,7 +532,7 @@
                     </tfoot>
                 </table>
             </div>
-        </asp:Panel>
+<%--        </asp:Panel>--%>
         <br />
         <br />
 

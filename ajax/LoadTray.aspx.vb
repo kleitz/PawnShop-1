@@ -23,5 +23,7 @@ Partial Class ajax_LoadTray
         dt = DataConnection.DataAccessClassAsset.getAllTray(BranchId)
         Dim json = JsonConvert.SerializeObject(dt, Formatting.Indented)
         Response.Write(json)
+
+
     End Sub
 End Class

@@ -38,7 +38,7 @@
                 dataType: "json",
                 success: function (data) {
                     var ddlCategory = $('#dropdowCategory')
-                    ddlCategory.empty().append('<option selected="selected" value="0">กรุณาเลือกประเภท</option>');
+                    ddlCategory.empty().append('<option selected="selected" value="">กรุณาเลือกประเภท</option>');
                     $.each(data, function (key, value) {
                         ddlCategory.append($("<option></option>").val(value.ID).html(value.GroupName));
                     });
@@ -59,7 +59,7 @@
                 dataType: "json",
                 success: function (data) {
                     var ddlEvent = $('#ddlEvent');
-                    ddlEvent.empty().append('<option selected="selected" value="0">กรุณาเลือกกิจกรรม</option>');
+                    ddlEvent.empty().append('<option selected="selected" value="">กรุณาเลือกกิจกรรม</option>');
                     $.each(data, function (key, value) {
                         ddlEvent.append($("<option></option>").val(value.EventID).html(value.Detail));
                     });
@@ -121,9 +121,9 @@
                 Type: "POST",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
+                    //console.log(data);
                     $('#tableTray tbody').empty();
-                    for (var i = 0 ; data.length ; i++) {
+                    for (var i = 0 ; i < data.length ; i++) {
                         $('#tableTray tbody').append(
                             "<tr>" +
                                 "<td style='text-align:center;display: none'>" + data[i].ID + "</td>" +
