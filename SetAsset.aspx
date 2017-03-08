@@ -772,7 +772,6 @@
                             <td></td>
                             <td>
                                 <button id="conFirmEdit" class="uk-button uk-button-success" type="submit" style="color: #ffffff" >ยืนยันการแก้ไข</button>
-                                <%--<input id="conFirmEdit" type="submit" class="uk-button uk-button-success" value="ยืนยันการแก้ไข" style="color: #ffffff" />--%>
                                 <input id="closeEdit" type="button" class="uk-button uk-button-danger uk-modal-close" value="ปิดการแก้ไข" style="color: #ffffff" />
                             </td>
                         </tr>
