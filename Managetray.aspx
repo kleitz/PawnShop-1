@@ -11,6 +11,11 @@
     <link href="css/uikit.min.css" rel="stylesheet" type="text/css" />
     <link href="css/GridStyle.css" rel="stylesheet" />
     <title>::ระบบจัดการทรัพย์หลุด::</title>
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#TotalWeight').val(0);
@@ -26,9 +31,25 @@
             //    AddTray(); 
             //});
 
+            $('#form11').validate({
+                rules: {
+                    DropdownCategorys: {
+                        required : true
+                    },
+                    DropdownEvents: {
+                        required: true
+                    }
+                }
+                , messages: {
+                    DropdownCategorys: " กรุณาเลือกประเภทก่อน",
+                    DropdownEvents: " กรุณาเลือกกิจกรรม"
+                }
+                , submitHandler: function (form) {
+                    //alert('xxxx');
 
-
-
+                    AddTray();
+                }
+            });
         });
 
         function loadCategory() {
@@ -321,15 +342,23 @@
                     <td>เลือกประเภท
                     </td>
                     <td>
-                        <select id="dropdowCategory" name="DropdownCategory"></select>
+                        <select id="dropdowCategory" name="DropdownCategorys"></select>
                     </td>
                 </tr>
                 <tr>
                     <td>เลือกกิจกรรม
                     </td>
                     <td>
-                        <select id="ddlEvent" name="DropdownEvent"></select>
-                        <input id="btnSetTray" type="button" class="uk-button uk-button-primary" value="จัดถาด" style="color: #ffffff" />
+                        <select id="ddlEvent" name="DropdownEvents"></select>
+  <%--                      <input id="btnSetTray" type="button" class="uk-button uk-button-primary" value="จัดถาด" style="color: #ffffff" />--%>                       
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+                        <button id="btnSetTray" class="uk-button uk-button-success" type="submit" style="color: #ffffff" >จัดถาด</button>
                     </td>
                 </tr>
             </table>
