@@ -52,12 +52,12 @@
                     }
                 },
                 messages: {
-                    DropdownCategory: "กรุณาเลือกประเภทชุดก่อน",
-                    DropdownEvent: "กรุณาเลือกกิจกรรม"
+                    DropdownCategory: " กรุณาเลือกประเภทชุดก่อน ",
+                    DropdownEvent: " กรุณาเลือกกิจกรรม "
                 },
                 submitHandler: function (form) {
-                    alert("xxx");
-                    //AddSet();
+                    //alert("xxx");
+                    AddSet();
                     return false;
                 }
 

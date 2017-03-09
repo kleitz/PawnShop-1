@@ -22,9 +22,11 @@
             loadActivity();
             loadTray();
 
-            $('#btnSetTray').click(function () {
-                AddTray(); 
-            });
+            //$('#btnSetTray').click(function () {
+            //    AddTray(); 
+            //});
+
+
 
 
         });
@@ -308,7 +310,7 @@
     </script>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form11">
         <div class="uk-form">
             <br />
             <br />
