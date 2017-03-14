@@ -19,7 +19,7 @@ Partial Class ajax_CheckPrivateAndInsertBuyOut
 
         If UserName = Emid Then
             InsertBuyBack(ticketID, Price, name, remark)
-
+            updateTicketBuyOut(ticketID)
             Response.Write("OK")
         Else
             Response.Write("คุณกรอกรหัสยืนยันไม่ถูกต้อง")

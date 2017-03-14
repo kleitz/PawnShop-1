@@ -5,11 +5,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <script type="text/javascript" src="js/jquery.js"></script>
+    <script src="js/jquery.validate.js"></script>
     <script src="js/jquery.tabletojson.js"></script>
     <script src="js/uikit.min.js" type="text/javascript"></script>
     <link href="css/uikit.min.css" rel="stylesheet" type="text/css" />
     <link href="css/GridStyle.css" rel="stylesheet" />
-
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
     <title>::ระบบจัดการทรัพย์หลุด::</title>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -31,7 +36,7 @@
                             "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].CreatedDate + "</td>" +
                             "<td style='text-align:center'>" + data[i].Amount + "</td>" +
-                            "<td style='text-align:center'>" + "<input id='FirstEstimate' type='text' name='first' class='uk-form-width-medium' value='" + data[i].FirstEstimate + "' />" + "</td>" +
+                            "<td style='text-align:center'>" + "<input id='FirstEstimate' type='text' name='firstEstimate' class='uk-form-width-medium' value='" + data[i].FirstEstimate + "' />" + "</td>" +
                             "<td style='text-align:center'>" + data[i].SecondEstimate + "</td>" +
                             "<td style='text-align:center;display:none;' class='reportNo' >" + data[i].ReportNo + "</td>" +
                             "<td style='text-align:center'><input type='button' value='รายละเอียด' style='color:#ffffff' class='uk-button uk-button-primary' onclick=\"getTicketDetail('" + data[i].TicketId + "')\"/> </td>" +
@@ -46,51 +51,75 @@
                 }
             });
 
-            $('#btnUpdate').click(function () {
-                var arrData = [];
-                $('#tableData tbody tr').each(function () {
-                    var currentRow = $(this);
-
-                    var id = currentRow.find("td:eq(0)").text();
-                    var TicketId = currentRow.find("td:eq(1)").text();
-                    var BookNo = currentRow.find("td:eq(2)").text();
-                    var TicketNo = currentRow.find("td:eq(3)").text();
-                    //var CreateDate = currentRow.find("td:eq(4)").text();
-                    var Amount = currentRow.find("td:eq(5)").text();
-                    var FirstEstimate = currentRow.find('input[name=first]').val();
-                    var SecondEstimate = currentRow.find("td:eq(7)").text();
-                    var ReportNo = currentRow.find("td:eq(8)").text();
-
-                    var obj = {};
-                    obj.id = id;
-                    obj.TicketId = TicketId;
-                    obj.BookNo = BookNo;
-                    obj.TicketNo = TicketNo;
-                    //obj.CreateDate = CreateDate;
-                    obj.Amount = Amount;
-                    obj.FirstEstimate = FirstEstimate;
-                    obj.SecondEstimate = SecondEstimate;
-                    obj.ReportNo = ReportNo;
-
-                    arrData.push(obj);
-                });
-                $.ajax({
-                    url: "ajax/UpdateEstimate.aspx",
-                    method: "POST",
-                    dataType: "json",
-                    data: JSON.stringify(arrData),
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-                        if ($.trim(data).toString() == 'Success') {
-
-                        }
-                    },
-                });
-                $('#lblAlert').text("ประเมินตั๋วเรียบร้อย");
-                AlertModal("modalAlertSuccess");
-                loadGrid();
+            $('#form15').validate({
+                rules: {
+                    firstEstimate: {
+                        required: true,
+                        digits: true
+                    }
+                },
+                messages: {
+                    firstEstimate: " กรุณากรอกราคาประเมินและต้องเป็นค่าตัวเลข",
+                }
+                    ,
+                submitHandler: function (form) {
+                    UpdateEstimate()
+                    //confirmEdit();
+                    //form.submit();
+                }
             });
+
+            //$('#btnUpdate').click(function () {
+
+            //});
         });
+
+        function UpdateEstimate() {
+            var arrData = [];
+            $('#tableData tbody tr').each(function () {
+                var currentRow = $(this);
+
+                var id = currentRow.find("td:eq(0)").text();
+                var TicketId = currentRow.find("td:eq(1)").text();
+                var BookNo = currentRow.find("td:eq(2)").text();
+                var TicketNo = currentRow.find("td:eq(3)").text();
+                //var CreateDate = currentRow.find("td:eq(4)").text();
+                var Amount = currentRow.find("td:eq(5)").text();
+                var FirstEstimate = currentRow.find('input[name=first]').val();
+                var SecondEstimate = currentRow.find("td:eq(7)").text();
+                var ReportNo = currentRow.find("td:eq(8)").text();
+
+                var obj = {};
+                obj.id = id;
+                obj.TicketId = TicketId;
+                obj.BookNo = BookNo;
+                obj.TicketNo = TicketNo;
+                //obj.CreateDate = CreateDate;
+                obj.Amount = Amount;
+                obj.FirstEstimate = FirstEstimate;
+                obj.SecondEstimate = SecondEstimate;
+                obj.ReportNo = ReportNo;
+
+                arrData.push(obj);
+            });
+            $.ajax({
+                url: "ajax/UpdateEstimate.aspx",
+                method: "POST",
+                dataType: "json",
+                data: JSON.stringify(arrData),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if ($.trim(data).toString() == 'Success') {
+
+                    }
+                },
+            });
+            $('#lblAlert').text("ประเมินตั๋วเรียบร้อย");
+            AlertModal("modalAlertSuccess");
+            loadGrid();
+        }
+
+
 
         function AlertModal(ModalName) {
             var modalName = "#" + ModalName;
@@ -197,7 +226,7 @@
     </script>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form15" runat="server">
         <div class="uk-form">
             <div id='loading' style='display: none'>
                 <img src="img/ajax-loader.gif" />
@@ -223,7 +252,8 @@
                 <tbody>
                 </tbody>
             </table>
-            <input id="btnUpdate" type="button" class="uk-button uk-button-success" style="color: #ffffff" value="Update" />
+            <%--<input id="btnUpdate" type="button" class="uk-button uk-button-success" style="color: #ffffff" value="Update" />--%>
+            <button type="submit" class="uk-button uk-button-success" style="color: #ffffff">Update</button>
         </div>
         <br />
         <br />

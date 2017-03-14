@@ -1585,6 +1585,27 @@ Namespace DataConnection
 
         End Function
 
+        Public Shared Function updateTicketBuyOut(ByVal ticketId As String) As Boolean
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_updateBuyOut"""
+            cmd.Parameters.Add(New OracleParameter("vTicketId", OracleDbType.Varchar2)).Value = ticketId
+            Try
+                cmd.ExecuteNonQuery()
+                Return True
+
+            Catch ex As Exception
+                Return False
+            End Try
+            con.Close()
+        End Function
+
+
     End Class
 End Namespace
 

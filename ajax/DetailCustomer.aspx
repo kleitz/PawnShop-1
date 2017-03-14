@@ -7,12 +7,55 @@
 <head runat="server">
     <title></title>
     
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script src="js/uikit.min.js" type="text/javascript"></script>
-    <script src="js/components/notify.min.js"></script>
-    <link href="css/uikit.min.css" rel="stylesheet" type="text/css" />
-    <link href="css/GridStyle.css" rel="stylesheet" />
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script src="../js/jquery.validate.js"></script>
+    <script src="../js/uikit.min.js" type="text/javascript"></script>
+    <script src="../js/components/notify.min.js"></script>
+    <link href="../css/uikit.min.css" rel="stylesheet" type="text/css" />
+    <link href="../css/GridStyle.css" rel="stylesheet" />
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
     <script type="text/javascript">
+        $(document).ready(function () {
+            $('#form13').validate({
+                rules: {
+                    NameBuy: {
+                        required: true
+                    },
+                    Remark: {
+                        required: true
+                    },
+                    BuyBack: {
+                        required: true,
+                        digits: true
+                    }
+                },
+                messages: {
+                    NameBuy: "กรุณากรอกชื่อผู้ตามซื้อคืน",
+                    Remark: "กรุณากรอกหมายเหตุ",
+                    BuyBack : "กรุณากรอกราคาที่ตามซื้อคืนเป็นตัวเลข"
+                },
+                submitHandler: function (form) {
+                    AlertModal("modalAlertSuccess");
+                    return false;
+                }
+            });
+
+            var status = $('#lblAlertState').val();
+            if (status = 'ซื้อคืนไปแล้ว') {
+                $('#detailCustomer').hide();
+                return false; 
+            } else if (status = 'ยังไม่มีการซื้อคืน') {
+                $('#detailCustomer').show();
+                return false;
+            }
+
+
+        });
+
         function AlertModal(ModalName) {
             var modalName = "#" + ModalName;
             var modal = UIkit.modal(modalName);
@@ -23,25 +66,25 @@
                 modal.show();
             }
         }
-        function beforBuy() {
-            var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
-            var price = $('#txtBuyBack').val();
+        //function beforBuy() {
+        //    var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+        //    var price = $('#txtBuyBack').val();
 
-            if (price == "") {
-                $('#lblAlert').text("กรุณากรอกตัวเลข");
-                AlertModal("modalAlert");
+        //    if (price == "") {
+        //        $('#lblAlert').text("กรุณากรอกตัวเลข");
+        //        AlertModal("modalAlert");
 
-                return; 
-            }
+        //        return; 
+        //    }
 
-            if (numberRegex.test(price) && price !="") {
-                AlertModal("modalAlertSuccess");
-            } else {
-                $('#lblAlert').text("กรุณากรอกเป็นตัวเลข");
-                AlertModal("modalAlert");
-            }
+        //    if (numberRegex.test(price) && price !="") {
+        //        AlertModal("modalAlertSuccess");
+        //    } else {
+        //        $('#lblAlert').text("กรุณากรอกเป็นตัวเลข");
+        //        AlertModal("modalAlert");
+        //    }
            
-        }
+        //}
 
         function Buy() {
             var price = $('#txtBuyBack').val();
@@ -72,7 +115,7 @@
     </script>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form13" runat="server">
         <asp:HiddenField ID="hiddenTicketID" runat="server" />
         <div class="uk-form uk-form-horizontal ">
             <table class="uk-table uk-table-condensed">
@@ -144,48 +187,53 @@
                  </Columns>
              </asp:GridView>
             <hr />
-            
             <table>
                 <tr>
                     <td>
-                        <B>สถานะการซื้อคืน</B>
+                        <b>สถานะการซื้อคืน</b>
                     </td>
                     <td>
-                        <asp:Label ID="lblAlertState" runat="server" ></asp:Label>
+                        <asp:Label ID="lblAlertState" runat="server"></asp:Label>
                     </td>
                 </tr>
-                <tr>
-                    <td><b>ชื่อ-นามสกุล ผู้ตามซื้อคืน</b></td>
-                    <td>
-                        <input type="text" id="txtNameBuy" class="uk-form-width-medium"  />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>หมายเหตุ</b>
-                    </td>
-                    <td>
-                        <input type="text" id="txtRemark" class="uk-form-width-medium"  />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                       <B>ต้องการซื้อคืนในราคา</B>
-                    </td>
-                    <td>
-                        <input type="text" id="txtBuyBack" class="uk-form-width-medium"  /> &nbsp;&nbsp; <b>บาท</b>
-                    </td>
-                </tr>
-               <tr>
-                   <td>
-
-                   </td>
-                   <td>
-                       <input type="button" id="btnConfirm" class="uk-button uk-button-primary" value="ยืนยันการขาย(ซื้อคืน)" style="color:#ffffff" onclick="beforBuy()"  />
-                   </td>
-               </tr>
             </table>
-            
+            <hr />
+
+            <div id="detailCustomer">
+                <table>
+                    <tr>
+                        <td><b>ชื่อ-นามสกุล ผู้ตามซื้อคืน</b></td>
+                        <td>
+                            <input type="text" id="txtNameBuy" name="NameBuy" class="uk-form-width-medium" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>หมายเหตุ</b>
+                        </td>
+                        <td>
+                            <input type="text" id="txtRemark" name="Remark" class="uk-form-width-medium" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>ต้องการซื้อคืนในราคา</b>
+                        </td>
+                        <td>
+                            <input type="text" id="txtBuyBack" name="BuyBack" class="uk-form-width-medium" />
+                            &nbsp;&nbsp; <b>บาท</b>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <%--<input type="button" id="btnConfirm" class="uk-button uk-button-primary" value="ยืนยันการขาย(ซื้อคืน)" style="color:#ffffff" onclick="beforBuy()"  />--%>
+
+                            <button type="submit" id="btnConfirm" class="uk-button uk-button-primary" style="color: #ffffff">ยืนยันการขาย(ซื้อคืน)</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <div class="uk-modal" id="modalAlertSuccess">
