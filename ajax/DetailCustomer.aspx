@@ -34,9 +34,9 @@
                     }
                 },
                 messages: {
-                    NameBuy: "กรุณากรอกชื่อผู้ตามซื้อคืน",
-                    Remark: "กรุณากรอกหมายเหตุ",
-                    BuyBack : "กรุณากรอกราคาที่ตามซื้อคืนเป็นตัวเลข"
+                    NameBuy: " กรุณากรอกชื่อผู้ตามซื้อคืน",
+                    Remark: " กรุณากรอกหมายเหตุ",
+                    BuyBack : " กรุณากรอกราคาที่ตามซื้อคืนเป็นตัวเลข"
                 },
                 submitHandler: function (form) {
                     AlertModal("modalAlertSuccess");
@@ -44,14 +44,14 @@
                 }
             });
 
-            var status = $('#lblAlertState').val();
-            if (status = 'ซื้อคืนไปแล้ว') {
-                $('#detailCustomer').hide();
-                return false; 
-            } else if (status = 'ยังไม่มีการซื้อคืน') {
-                $('#detailCustomer').show();
-                return false;
-            }
+            //var status = $('#lblAlertState').val();
+            //if (status = 'ซื้อคืนไปแล้ว') {
+            //    $('#detailCustomer').hide();
+            //    return false; 
+            //} else {
+            //    $('#detailCustomer').show();
+            //    return false;
+            //}
 
 
         });
@@ -66,25 +66,6 @@
                 modal.show();
             }
         }
-        //function beforBuy() {
-        //    var numberRegex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
-        //    var price = $('#txtBuyBack').val();
-
-        //    if (price == "") {
-        //        $('#lblAlert').text("กรุณากรอกตัวเลข");
-        //        AlertModal("modalAlert");
-
-        //        return; 
-        //    }
-
-        //    if (numberRegex.test(price) && price !="") {
-        //        AlertModal("modalAlertSuccess");
-        //    } else {
-        //        $('#lblAlert').text("กรุณากรอกเป็นตัวเลข");
-        //        AlertModal("modalAlert");
-        //    }
-           
-        //}
 
         function Buy() {
             var price = $('#txtBuyBack').val();
@@ -112,6 +93,13 @@
             });
 
         }
+        
+        function ClsTextbox() {
+            $('#txtNameBuy').val("");
+            $('#txtRemark').val("");
+            $('#txtBuyBack').val("");
+        }
+
     </script>
 </head>
 <body>
@@ -230,6 +218,7 @@
                             <%--<input type="button" id="btnConfirm" class="uk-button uk-button-primary" value="ยืนยันการขาย(ซื้อคืน)" style="color:#ffffff" onclick="beforBuy()"  />--%>
 
                             <button type="submit" id="btnConfirm" class="uk-button uk-button-primary" style="color: #ffffff">ยืนยันการขาย(ซื้อคืน)</button>
+                            <input type="button" id="btnReset" class ="uk-button uk-button-danger" style="color: #ffffff" value="ล้างข้อมูล" onclick="ClsTextbox()" />
                         </td>
                     </tr>
                 </table>
@@ -244,7 +233,7 @@
                         <tr>
                             <td></td>
                             <td>
-                                <input type="text" id="confirmCode" class="uk-form-width-medium" /><input type="button" id="btnPrivateCode" class="uk-button uk-button-success" value="ยินยัน" onclick="Buy()" />
+                                <input type="password" id="confirmCode" class="uk-form-width-medium" /><input type="button" id="btnPrivateCode" class="uk-button uk-button-success" value="ยืนยัน" onclick="Buy()" />
                             </td>
                         </tr>
                         <tr>

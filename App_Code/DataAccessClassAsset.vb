@@ -1605,6 +1605,31 @@ Namespace DataConnection
             con.Close()
         End Function
 
+        Public Shared Function CheckBuyOutDuplicate(ByVal ticketId As String) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_CheckDuplicateBuyBack"""
+            cmd.Parameters.Add(New OracleParameter("vTicketID", OracleDbType.Varchar2)).Value = ticketId
+            cmd.Parameters.Add(New OracleParameter("TicketInfo", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+
+        End Function
+
+
 
     End Class
 End Namespace

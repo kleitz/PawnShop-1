@@ -323,6 +323,36 @@
                 </div>
             </div>
         </div>
+
+        <div class="uk-modal" id="modalSecret">
+            <div class="uk-modal-dialog">
+                <div class="uk-modal-header uk-alert-success">กรุณากรอกรหัสความปลอดภัย</div>
+                <div class="uk-form uk-form-horizontal">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="text" id="confirmCode" class="uk-form-width-medium" /><input type="button" id="btnPrivateCode" class="uk-button uk-button-success" value="ยินยัน" onclick="Buy()" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+
+                            </td>
+                            <td>
+                                <div id='loadingmessage2' style='display: none'>
+                                    <img src="img/ajax-loader.gif" />
+                                </div>
+                            </td>
+                            <td>
+                                 <p id="lblmodal"></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </form>
 </body>
 </html>

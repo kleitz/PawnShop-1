@@ -1,7 +1,6 @@
-﻿
+﻿Imports System.Data
 Imports Newtonsoft.Json
 Imports PSCS.Libary.Models
-Imports System.Data
 Imports DataConnection.DataAccessClassAsset
 Partial Class ajax_CheckPrivateAndInsertBuyOut
     Inherits System.Web.UI.Page
@@ -16,6 +15,15 @@ Partial Class ajax_CheckPrivateAndInsertBuyOut
         Dim Price As String = Request.Form("price")
         Dim name As String = Request.Form("name")
         Dim remark As String = Request.Form("remark")
+
+        Dim dt As New DataTable
+        dt = CheckBuyOutDuplicate(ticketID)
+        Dim cnt As Integer = Integer.Parse(dt.Rows(0)("cnt").ToString())
+        If cnt > 0 Then
+            Response.Write("ตัวนี้ถูกขายไปแล้ว")
+            Exit Sub
+        End If
+
 
         If UserName = Emid Then
             InsertBuyBack(ticketID, Price, name, remark)
