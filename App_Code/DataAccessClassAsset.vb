@@ -1626,9 +1626,30 @@ Namespace DataConnection
             End Try
 
             Return dt
-
         End Function
 
+        Public Shared Function getSomeBranch(ByVal ConcatBranch As String) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_getSomeBranch"""
+            cmd.Parameters.Add(New OracleParameter("Branchs", OracleDbType.Varchar2)).Value = ConcatBranch
+            cmd.Parameters.Add(New OracleParameter("cur", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+        End Function
 
 
     End Class
