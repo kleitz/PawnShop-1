@@ -22,74 +22,74 @@
                  $('#tab6').removeClass('uk-active');
                  $('#tab7').removeClass('uk-active');
 
-                 $('#AuctionPane').load("AuctionArea/BuyDay.aspx");
+                 $('#AuctionPane').load("AuctionArea/BuyDay2.aspx");
 
              });
-             $('#tab2').click(function () {
-                 $(this).addClass('uk-active');
-                 $('#tab1').removeClass('uk-active');
-                 $('#tab3').removeClass('uk-active');
-                 $('#tab4').removeClass('uk-active');
-                 $('#tab5').removeClass('uk-active');
-                 $('#tab6').removeClass('uk-active');
-                 $('#tab7').removeClass('uk-active');
+             //$('#tab2').click(function () {
+             //    $(this).addClass('uk-active');
+             //    $('#tab1').removeClass('uk-active');
+             //    $('#tab3').removeClass('uk-active');
+             //    $('#tab4').removeClass('uk-active');
+             //    $('#tab5').removeClass('uk-active');
+             //    $('#tab6').removeClass('uk-active');
+             //    $('#tab7').removeClass('uk-active');
 
-                 $('#AuctionPane').load("AuctionArea/AddPriceAuction.aspx");
-             });
-             $('#tab3').click(function () {
-                 $(this).addClass('uk-active');
-                 $('#tab2').removeClass('uk-active');
-                 $('#tab1').removeClass('uk-active');
-                 $('#tab4').removeClass('uk-active');
-                 $('#tab5').removeClass('uk-active');
-                 $('#tab6').removeClass('uk-active');
-                 $('#tab7').removeClass('uk-active');
+             //    $('#AuctionPane').load("AuctionArea/AddPriceAuction.aspx");
+             //});
+             //$('#tab3').click(function () {
+             //    $(this).addClass('uk-active');
+             //    $('#tab2').removeClass('uk-active');
+             //    $('#tab1').removeClass('uk-active');
+             //    $('#tab4').removeClass('uk-active');
+             //    $('#tab5').removeClass('uk-active');
+             //    $('#tab6').removeClass('uk-active');
+             //    $('#tab7').removeClass('uk-active');
 
                  
-             });
-             $('#tab4').click(function () {
-                 $(this).addClass('uk-active');
-                 $('#tab2').removeClass('uk-active');
-                 $('#tab3').removeClass('uk-active');
-                 $('#tab1').removeClass('uk-active');
-                 $('#tab5').removeClass('uk-active');
-                 $('#tab6').removeClass('uk-active');
-                 $('#tab7').removeClass('uk-active');
+             //});
+             //$('#tab4').click(function () {
+             //    $(this).addClass('uk-active');
+             //    $('#tab2').removeClass('uk-active');
+             //    $('#tab3').removeClass('uk-active');
+             //    $('#tab1').removeClass('uk-active');
+             //    $('#tab5').removeClass('uk-active');
+             //    $('#tab6').removeClass('uk-active');
+             //    $('#tab7').removeClass('uk-active');
 
-                 $('#AuctionPane').load("AuctionArea/Register.aspx");
-             });
-             $('#tab5').click(function () {
-                 $(this).addClass('uk-active');
-                 $('#tab2').removeClass('uk-active');
-                 $('#tab3').removeClass('uk-active');
-                 $('#tab4').removeClass('uk-active');
-                 $('#tab1').removeClass('uk-active');
-                 $('#tab6').removeClass('uk-active');
-                 $('#tab7').removeClass('uk-active');
+             //    $('#AuctionPane').load("AuctionArea/Register.aspx");
+             //});
+             //$('#tab5').click(function () {
+             //    $(this).addClass('uk-active');
+             //    $('#tab2').removeClass('uk-active');
+             //    $('#tab3').removeClass('uk-active');
+             //    $('#tab4').removeClass('uk-active');
+             //    $('#tab1').removeClass('uk-active');
+             //    $('#tab6').removeClass('uk-active');
+             //    $('#tab7').removeClass('uk-active');
 
-                 $('#AuctionPane').load("AuctionArea/RegisterInfo.aspx");
+             //    $('#AuctionPane').load("AuctionArea/RegisterInfo.aspx");
 
-             });
-             $('#tab6').click(function () {
-                 $(this).addClass('uk-active');
-                 $('#tab2').removeClass('uk-active');
-                 $('#tab3').removeClass('uk-active');
-                 $('#tab4').removeClass('uk-active');
-                 $('#tab5').removeClass('uk-active');
-                 $('#tab1').removeClass('uk-active');
-                 $('#tab7').removeClass('uk-active');
-             });
-             $('#tab7').click(function () {
-                 $(this).addClass('uk-active');
-                 $('#tab2').removeClass('uk-active');
-                 $('#tab3').removeClass('uk-active');
-                 $('#tab4').removeClass('uk-active');
-                 $('#tab5').removeClass('uk-active');
-                 $('#tab6').removeClass('uk-active');
-                 $('#tab1').removeClass('uk-active');
+             //});
+             //$('#tab6').click(function () {
+             //    $(this).addClass('uk-active');
+             //    $('#tab2').removeClass('uk-active');
+             //    $('#tab3').removeClass('uk-active');
+             //    $('#tab4').removeClass('uk-active');
+             //    $('#tab5').removeClass('uk-active');
+             //    $('#tab1').removeClass('uk-active');
+             //    $('#tab7').removeClass('uk-active');
+             //});
+             //$('#tab7').click(function () {
+             //    $(this).addClass('uk-active');
+             //    $('#tab2').removeClass('uk-active');
+             //    $('#tab3').removeClass('uk-active');
+             //    $('#tab4').removeClass('uk-active');
+             //    $('#tab5').removeClass('uk-active');
+             //    $('#tab6').removeClass('uk-active');
+             //    $('#tab1').removeClass('uk-active');
 
-                 $('#AuctionPane').load("AuctionArea/AuctionInfo.aspx");
-             });
+             //    $('#AuctionPane').load("AuctionArea/AuctionInfo.aspx");
+             //});
          });
      </script>
 </head>
@@ -100,7 +100,7 @@
                 <li id="tab1">
                     <a>กำหนดวันขาย</a>
                 </li>
-                <li id="tab2">
+<%--                <li id="tab2">
                     <a>เพิ่มราคาประมูลทรัพย์</a>
                 </li>
                 <li id="tab3">
@@ -117,7 +117,7 @@
                 </li>
                 <li id="tab7">
                     <a>ข้อมูลการประมูล</a>
-                </li>
+                </li>--%>
             </ul>
         </div>
         <div id="AuctionPane">
