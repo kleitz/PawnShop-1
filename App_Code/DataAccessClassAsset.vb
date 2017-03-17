@@ -1651,6 +1651,30 @@ Namespace DataConnection
             Return dt
         End Function
 
+        Public Shared Function getTicketForEvent(ByVal Sdate As Date, ByVal SDate2 As Date) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_getTicketForEvent"""
+            cmd.Parameters.Add(New OracleParameter("sDate", OracleDbType.Date)).Value = Sdate
+            cmd.Parameters.Add(New OracleParameter("sDate2", OracleDbType.Date)).Value = SDate2
+            cmd.Parameters.Add(New OracleParameter("cur", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+        End Function
+
 
     End Class
 End Namespace

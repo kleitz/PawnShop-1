@@ -11,7 +11,8 @@ Partial Class ajax_ajax_AuctionArea_AddEvent
         If (type = "AddEvent") Then
             Dim EventID As String = Guid.NewGuid.ToString("D").ToUpper()
             Dim DateStartEvent_param As String = Request.Form("DateStartEvent")
-            Dim DateStartEvent = Convert.ToInt32(DateStartEvent_param.Substring(6, 4)) - 543 & "-" & DateStartEvent_param.Substring(3, 2) & "-" & DateStartEvent_param.Substring(0, 2)
+            'Dim DateStartEvent = Convert.ToInt32(DateStartEvent_param.Substring(6, 4)) - 543 & "-" & DateStartEvent_param.Substring(3, 2) & "-" & DateStartEvent_param.Substring(0, 2)
+            Dim DateStartEvent = Convert.ToInt32(DateStartEvent_param.Substring(6, 4)) & "-" & DateStartEvent_param.Substring(3, 2) & "-" & DateStartEvent_param.Substring(0, 2)
             Dim EventNo As String = Request.Form("EventNo")
             Dim ProductType As Integer = Request.Form("ProductType")
             Dim Time As String = Request.Form("Time")

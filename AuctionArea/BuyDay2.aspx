@@ -552,6 +552,7 @@
                 getRowBranch(gEventID);
                 //$('#modalConfirm').modal('hide');
                 $('#modalAddEvent').modal('hide');
+                loadDataEventAll();
             }
 
         });

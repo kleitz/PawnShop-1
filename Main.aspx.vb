@@ -24,6 +24,8 @@ Partial Class Main
         Dim tokenOb As New PSCS.Libary.Models.TokenClass
         Dim RoleID As String = CType(Session(WebConstant.SessionName_UserObj), TokenClass).RoleId
 
+        'Dim UserId As String = CType(Session(WebConstant.SessionName_UserObj), TokenClass).
+
         hiddenRole.Value = RoleID
 
 
