@@ -56,5 +56,11 @@ Public Class TicketEstimate
 
 End Class
 
+Public Class TicketOnEvent
+    Public Property Ticket As List(Of String)
+    Public Property eventid As String
+End Class
+
+
 
 

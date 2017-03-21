@@ -34,7 +34,62 @@
             $('#chkall').change(function () {
                 $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
             });
+
+            $('#ddlEvent').change(function () {
+                var eventid = $('#ddlEvent option:selected').val();
+                $('#lblActivity').text($('#ddlEvent option:selected').text()).css('color','blue');
+                $('#loadingmessage4').show();
+                $.ajax({
+                    type : "POST", 
+                    url: "ajax/getDataOnEvent.aspx",
+                    data : "eventid=" +  eventid,
+                    dataType : "json" , 
+                    success: function (data) {
+                        $('#tableDataTicket tbody').empty();
+                        for (i = 0 ; i < data.length; i++) {
+                            $('#tableDataTicket tbody').append(
+                            "<tr>" +
+                                "<td style='text-align:center'>" + (i + 1) + "</td>" +
+                                "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                                "<td style='text-align:center'>" + data[i].DateCreated+ "</td>" +
+                                "<td style='text-align:center'>" + data[i].Username + "</td>" +
+                            "</tr>"
+                            );
+                        }
+                        $('#loadingmessage4').hide();
+                    }
+                });
+            });
         });
+        
+        function LoadTicketOnEvent() {
+            var eventid = $('#ddlEvent option:selected').val();
+            $('#lblActivity').text($('#ddlEvent option:selected').text()).css('color', 'blue');
+            $('#loadingmessage4').show();
+            $.ajax({
+                type: "POST",
+                url: "ajax/getDataOnEvent.aspx",
+                data: "eventid=" + eventid,
+                dataType: "json",
+                success: function (data) {
+                    $('#tableDataTicket tbody').empty();
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableDataTicket tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + (i + 1) + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center'>" + data[i].DateCreated + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Username + "</td>" +
+                            "<td style='text-align:center'><input class='chkOut'  type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
+
+                        "</tr>"
+                        );
+                    }
+                    $('#loadingmessage4').hide();
+                }
+            });
+        }
+
 
         function LoadTicket() {
             $('#loadingmessage3').show();
@@ -84,24 +139,47 @@
         }
 
         function AddTicketOnEvent() {
+            var eventid = $('#ddlEvent').val();
             var allValue = [];
             $('input.chk:checked').each(function () {
                 allValue.push($(this).val());
             });
-            console.log(allValue);
+
+            //console.log(allValue);
 
             var data = {
                 ticket: allValue,
-
+                eventid: eventid
                 };
             $.ajax({
                 type: "POST",
-                url: "",
+                url: "ajax/AddTicketOnEvent.aspx",
                 data : JSON.stringify(data),
                 success: function (data) {
-
+                    if (data == 'success') {
+                        $('#tableData tbody').empty();
+                        $('#lblAlert').text("นำเข้าตั๋วเรียบร้อย");
+                        AlertModal("modalAlertSuccess");
+                        LoadTicketOnEvent();
+                    }
                 }
             });
+        }
+
+
+        function CheckOutTicket() {
+
+        }
+
+        function AlertModal(ModalName) {
+            var modalName = "#" + ModalName;
+            var modal = UIkit.modal(modalName);
+
+            if (modal.isActive()) {
+                modal.hide();
+            } else {
+                modal.show();
+            }
         }
 
     </script>
@@ -150,7 +228,6 @@
         <thead>
             <tr>
                 <th style="text-align: center">ลำดับ</th>
-<%--                <th style="text-align: center">เลขตั๋ว</th>--%>
                 <th style="text-align: center">เลมที่</th>
                 <th style="text-align: center">เลขที่</th>
                 <th style="text-align: center">วันที่ออกตั๋ว</th>
@@ -162,6 +239,47 @@
         </tbody>
     </table>
     <button type="button"class="uk-button uk-button-success" style="color:#ffffff" onclick="AddTicketOnEvent()">นำเข้า</button>
+    <hr />
+        <div id='loadingmessage4' style='display: none'>
+        <img src="img/ajax-loader.gif" />
+    </div>
+    <table class="uk-table">
+        <tr>
+            <td><b>กิจกรรมและสถานที่</b></td>
+            <td>
+                <label id="lblActivity"></label>
+            </td>
+        </tr>
+        <tr>
+            <td><b>ตั๋วที่มีอยู่ในกิจกรรม</b></td>
+        </tr>
+    </table>
+
+    <table class="uk-table" border ="1" id ="tableDataTicket">
+         <thead>
+             <tr>
+                 <th style="text-align: center">ลำดับ</th>
+                 <th style="text-align: center">เลขตั๋ว</th>
+                 <th style="text-align: center">นำเข้าเมื่อวันที่</th>
+                 <th style="text-align: center">ผู้ดำเนินการ</th>
+                 <th style="text-align: center"><input type="checkbox" id="chkOut" name="chkOut"/></th>
+             </tr>
+         </thead>
+         <tbody>
+
+         </tbody>
+    </table>
+    <button type="button"class="uk-button uk-button-danger" style="color:#ffffff" onclick="">นำตั๋วออก</button>
+
+    <br /><br /><br />
+
+    <div class="uk-modal" id="modalAlertSuccess">
+        <div class="uk-modal-dialog">
+            <div class="uk-modal-header uk-alert-success">แจ้งเตือน</div>
+            <asp:Label ID="lblAlert" runat="server"></asp:Label>
+        </div>
+    </div>
+
     </form>
 </body>
 </html>

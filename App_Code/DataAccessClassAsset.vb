@@ -1675,6 +1675,52 @@ Namespace DataConnection
             Return dt
         End Function
 
+        Public Shared Function addTicketOnEvent(ByVal ticketid As String, ByVal eventId As String, ByVal username As String) As Boolean
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_AddTicketOnEvent"""
+            cmd.Parameters.Add(New OracleParameter("vID", OracleDbType.Varchar2)).Value = Guid.NewGuid.ToString("D").ToUpper()
+            cmd.Parameters.Add(New OracleParameter("vTicketId", OracleDbType.Varchar2)).Value = ticketid
+            cmd.Parameters.Add(New OracleParameter("vEventId", OracleDbType.Varchar2)).Value = eventId
+            cmd.Parameters.Add(New OracleParameter("vUsername", OracleDbType.Varchar2)).Value = username
+            Try
+                cmd.ExecuteNonQuery()
+                Return True
+
+            Catch ex As Exception
+                Return False
+            End Try
+            con.Close()
+        End Function
+
+        Public Shared Function getTicketFromEventId(ByVal eventid As String) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_getTicketFromEvent"""
+            cmd.Parameters.Add(New OracleParameter("vEventId", OracleDbType.Varchar2)).Value = eventid
+            cmd.Parameters.Add(New OracleParameter("TicketInfo", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+        End Function
+
 
     End Class
 End Namespace
