@@ -1721,6 +1721,27 @@ Namespace DataConnection
             Return dt
         End Function
 
+        Public Shared Function updateCheckOut(ByVal username As String, ByVal eventid As String, ByVal ticketId As String) As Boolean
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_CheckOutTicket"""
+            cmd.Parameters.Add(New OracleParameter("vUsername", OracleDbType.Varchar2)).Value = username
+            cmd.Parameters.Add(New OracleParameter("vEventId", OracleDbType.Varchar2)).Value = eventid
+            cmd.Parameters.Add(New OracleParameter("vTicketId", OracleDbType.Varchar2)).Value = ticketId
+            Try
+                cmd.ExecuteNonQuery()
+                Return True
+
+            Catch ex As Exception
+                Return False
+            End Try
+            con.Close()
+        End Function
 
     End Class
 End Namespace

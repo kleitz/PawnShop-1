@@ -168,7 +168,37 @@
 
 
         function CheckOutTicket() {
+            var eventid = $('#ddlEvent').val();
+            var allCheckOut = [];
+            $('input.chkOut:checked').each(function () {
+                allCheckOut.push($(this).val());
+            });
 
+            var data = {
+                ticket: allCheckOut , 
+                eventid: eventid
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "ajax/CheckOutTicket.aspx",
+                data: JSON.stringify(data),
+                success: function (data) {
+                    if (data == 'success') {
+                        $('#tableDataTicket tbody').empty();
+                        $('#lblAlert').text("นำตั๋วออกเรียบร้อย");
+                        AlertModal("modalAlertSuccess");
+                        LoadTicketOnEvent();
+                    }
+                }
+            });
+
+        }
+        function ResetTicket() {
+            $('#ddlEvent').val("");
+            $('#txtDateStart').val("");
+            $('#txtDateEnd').val("");
+            $('#tableData tbody').empty();
         }
 
         function AlertModal(ModalName) {
@@ -214,6 +244,7 @@
              </td>
              <td>
                  <input type="button" value="ค้นหา" class="uk-button uk-button-primary" style="color:#ffffff" onclick="LoadTicket()" />
+                 <input type="button" value="Reset" class="uk-button uk-button-primary" style="color:#ffffff" onclick="ResetTicket()" />
              </td>
          </tr>
      </table>
@@ -269,7 +300,7 @@
 
          </tbody>
     </table>
-    <button type="button"class="uk-button uk-button-danger" style="color:#ffffff" onclick="">นำตั๋วออก</button>
+    <button type="button"class="uk-button uk-button-danger" style="color:#ffffff" onclick="CheckOutTicket()">นำตั๋วออก</button>
 
     <br /><br /><br />
 
