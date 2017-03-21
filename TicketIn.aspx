@@ -17,7 +17,11 @@
     <link href="Bootstrap/css/pagination_ys.css" rel="stylesheet" />
     <link href="Bootstrap/css/datapicker/datepicker3.css" rel="stylesheet" />
     <link href="Bootstrap/css/Grid.css" rel="stylesheet" />
-
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+    </style>
     <title>::ระบบจัดการทรัพย์หลุด::</title>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -60,6 +64,30 @@
                     }
                 });
             });
+
+
+            $('#formTicketOnEvent').validate({
+                rules: {
+                    DropdownEvents: {
+                        required: true
+                    },
+                    txtDateStart: {
+                        required: true
+                    },
+                    txtDateEnd: {
+                        required: true
+                    }
+                }, messages: {
+                    DropdownEvents: "กรุณาเลือกกิจกรรม",
+                    txtDateStart: "กรุณาเลือกวันที่เริ่มต้น",
+                    txtDateEnd: "กรุณาเลือกวันที่สิ้นสุด"
+                }, submitHandler: function (form) {
+                    LoadTicket();
+                    //return ; 
+                    //alert('xxx');
+                }
+            });
+
         });
         
         function LoadTicketOnEvent() {
@@ -139,6 +167,7 @@
         }
 
         function AddTicketOnEvent() {
+            
             var eventid = $('#ddlEvent').val();
             var allValue = [];
             $('input.chk:checked').each(function () {
@@ -147,23 +176,30 @@
 
             //console.log(allValue);
 
-            var data = {
-                ticket: allValue,
-                eventid: eventid
+            if (allValue.length == 0) {
+                $('#lblAlert').text("กรุณาเลือกตั๋วที่จะนำเข้า");
+                AlertModal("modalAlertSuccess");
+                return; 
+            } else {
+                var data = {
+                    ticket: allValue,
+                    eventid: eventid
                 };
-            $.ajax({
-                type: "POST",
-                url: "ajax/AddTicketOnEvent.aspx",
-                data : JSON.stringify(data),
-                success: function (data) {
-                    if (data == 'success') {
-                        $('#tableData tbody').empty();
-                        $('#lblAlert').text("นำเข้าตั๋วเรียบร้อย");
-                        AlertModal("modalAlertSuccess");
-                        LoadTicketOnEvent();
+                $.ajax({
+                    type: "POST",
+                    url: "ajax/AddTicketOnEvent.aspx",
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (data == 'success') {
+                            $('#tableData tbody').empty();
+                            $('#lblAlert').text("นำเข้าตั๋วเรียบร้อย");
+                            AlertModal("modalAlertSuccess");
+                            LoadTicketOnEvent();
+                        }
                     }
-                }
-            });
+                });
+            }
+
         }
 
 
@@ -173,26 +209,30 @@
             $('input.chkOut:checked').each(function () {
                 allCheckOut.push($(this).val());
             });
+            
+            if (allCheckOut.length == 0) {
+                $('#lblAlert').text("กรุณาเลือกตั๋วที่จะนำออก");
+                AlertModal("modalAlertSuccess");
+            } else {
+                var data = {
+                    ticket: allCheckOut,
+                    eventid: eventid
+                };
 
-            var data = {
-                ticket: allCheckOut , 
-                eventid: eventid
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "ajax/CheckOutTicket.aspx",
-                data: JSON.stringify(data),
-                success: function (data) {
-                    if (data == 'success') {
-                        $('#tableDataTicket tbody').empty();
-                        $('#lblAlert').text("นำตั๋วออกเรียบร้อย");
-                        AlertModal("modalAlertSuccess");
-                        LoadTicketOnEvent();
+                $.ajax({
+                    type: "POST",
+                    url: "ajax/CheckOutTicket.aspx",
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        if (data == 'success') {
+                            $('#tableDataTicket tbody').empty();
+                            $('#lblAlert').text("นำตั๋วออกเรียบร้อย");
+                            AlertModal("modalAlertSuccess");
+                            LoadTicketOnEvent();
+                        }
                     }
-                }
-            });
-
+                });
+            }
         }
         function ResetTicket() {
             $('#ddlEvent').val("");
@@ -215,7 +255,7 @@
     </script>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="formTicketOnEvent" runat="server">
      <br /><br />
      <div class="uk-form">
      <table class="uk-table">
@@ -239,11 +279,10 @@
                  <b> ถึงวันที่</b>
              </td>
              <td>
-                 
                  <input id="txtDateEnd" name="txtDateEnd" type="text"  />
              </td>
              <td>
-                 <input type="button" value="ค้นหา" class="uk-button uk-button-primary" style="color:#ffffff" onclick="LoadTicket()" />
+                 <button id="btnSearch" class="uk-button uk-button-primary" type="submit" style="color: #ffffff" >ค้นหา</button>
                  <input type="button" value="Reset" class="uk-button uk-button-primary" style="color:#ffffff" onclick="ResetTicket()" />
              </td>
          </tr>
@@ -269,7 +308,7 @@
 
         </tbody>
     </table>
-    <button type="button"class="uk-button uk-button-success" style="color:#ffffff" onclick="AddTicketOnEvent()">นำเข้า</button>
+    <button type="button" class="uk-button uk-button-success" style="color:#ffffff" onclick="AddTicketOnEvent()">นำเข้า</button>
     <hr />
         <div id='loadingmessage4' style='display: none'>
         <img src="img/ajax-loader.gif" />
