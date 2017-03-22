@@ -18,7 +18,8 @@
 
                 var roleId = $('#hiddenRole').val();
                 if (roleId == 2) {
-                    $('#content').load("Default3.aspx");
+                    $('#content').load("DefaultManager.aspx");
+                    //$('#content').load("Default3.aspx");
                 } else {
                     $('#content').load("Default2.aspx");
                 }

@@ -57,6 +57,7 @@
                                 "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
                                 "<td style='text-align:center'>" + data[i].DateCreated+ "</td>" +
                                 "<td style='text-align:center'>" + data[i].Username + "</td>" +
+                                "<td style='text-align:center'><input class='chkOut' type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
                             "</tr>"
                             );
                         }
@@ -108,8 +109,7 @@
                             "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
                             "<td style='text-align:center'>" + data[i].DateCreated + "</td>" +
                             "<td style='text-align:center'>" + data[i].Username + "</td>" +
-                            "<td style='text-align:center'><input class='chkOut'  type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
-
+                            "<td style='text-align:center'><input class='chkOut' type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
                         "</tr>"
                         );
                     }
@@ -213,6 +213,7 @@
             if (allCheckOut.length == 0) {
                 $('#lblAlert').text("กรุณาเลือกตั๋วที่จะนำออก");
                 AlertModal("modalAlertSuccess");
+                return;
             } else {
                 var data = {
                     ticket: allCheckOut,
