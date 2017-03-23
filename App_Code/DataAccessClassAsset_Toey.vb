@@ -695,20 +695,6 @@ Namespace DataConnection
 
             Return dt
         End Function
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         Public Shared Function getProduct() As DataTable
             Dim dt As New DataTable
             Dim da As New OracleDataAdapter

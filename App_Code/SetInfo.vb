@@ -62,5 +62,11 @@ Public Class TicketOnEvent
 End Class
 
 
+Public Class eventid
+    Public Property eventid As String
+End Class
+
+
+
 
 
