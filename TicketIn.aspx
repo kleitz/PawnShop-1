@@ -83,9 +83,18 @@
                     txtDateStart: "กรุณาเลือกวันที่เริ่มต้น",
                     txtDateEnd: "กรุณาเลือกวันที่สิ้นสุด"
                 }, submitHandler: function (form) {
-                    LoadTicket();
-                    //return ; 
-                    //alert('xxx');
+
+                    var dateStart = $('#txtDateStart').datepicker('getDate');
+                    var dateEnd = $('#txtDateEnd').datepicker('getDate');
+
+                    if (dateStart > dateEnd) {
+                        $('#lblAlert').text("ช่วงวันที่ไม่ถูกต้อง").css('color','red');
+                        AlertModal("modalAlertSuccess");
+                        return; 
+                    } else {
+                       LoadTicket();
+                    }
+                   
                 }
             });
 
@@ -126,9 +135,9 @@
             data = "dateStart=" + dateStart + "&dateEnd=" + dateEnd;
             $.ajax({
                 type: "POST",
-                url : "ajax/LoadTicketForEvent.aspx",
-                data : data , 
-                dataType : "json",
+                url: "ajax/LoadTicketForEvent.aspx",
+                data: data,
+                dataType: "json",
                 success: function (data) {
                     $('#tableData tbody').empty();
                     for (i = 0 ; i < data.length; i++) {
@@ -140,11 +149,12 @@
                             "<td style='text-align:center'>" + data[i].TicketStarted + "</td>" +
                             "<td style='text-align:center'><input class='chk'  type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
                         "</tr>"
-                         );
+                            );
                     }
                     $('#loadingmessage3').hide();
                 }
             });
+            
         }
         function loadActivity() {
             $.ajax({
