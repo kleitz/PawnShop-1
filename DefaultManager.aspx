@@ -160,6 +160,74 @@
             return false; 
         }
 
+        function getTicketDetail(TicketID) {
+
+            data = "TicketID=" + TicketID;
+            $.ajax({
+                url: "ajax/DetailTicket.aspx",
+                data: data,
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#tableDetail tbody').empty();
+
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableDetail tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + data[i].TicketLine + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Name + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Description + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Quantity + "</td>" +
+                        "</tr>"
+                         );
+                    }
+                    AlertModal("modalDetail");
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+
+            });
+        }
+        function getEstimatDetail(TicketID) {
+            data = "TicketID=" + TicketID;
+            $.ajax({
+                url: "ajax/DetailEstimateLog.aspx",
+                data: data,
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#tableEstimateDetail tbody').empty();
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableEstimateDetail tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + data[i].EstimateNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Price + "</td>" +
+                            "<td style='text-align:center'>" + data[i].UserName + "</td>" +
+                            "<td style='text-align:center'>" + data[i].DateCreated + "</td>" +
+                        "</tr>"
+                         );
+                    }
+                    AlertModal("modalEstimatelog");
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+
+            });
+        }
+        function AlertModal(ModalName) {
+            var modalName = "#" + ModalName;
+            var modal = UIkit.modal(modalName);
+
+            if (modal.isActive()) {
+                modal.hide();
+            } else {
+                modal.show();
+            }
+        }
+
     </script>
 </head>
 <body>
@@ -226,6 +294,68 @@
 
             <button type="submit" class="uk-button uk-button-success" style="color: #ffffff">Update</button>
         </div>
+
+        <div class="uk-modal" id="modalDetail">
+            <div class="uk-modal-dialog">
+                <div class="uk-modal-header uk-alert-success">รายละเอียดตั๋ว</div>
+                <div id="detailTicket">
+                     <table id="tableDetail" class="uk-table" border="1">
+                         <thead>
+                             <tr>
+                                 <td style="text-align: center">
+                                     ลำดับ
+                                 </td>
+                                 <td style="text-align: center">
+                                     ประเภท
+                                 </td>
+                                 <td style="text-align: center">
+                                     รายละเอียด
+                                 </td>
+                                 <td style="text-align: center">
+                                     จำนวน
+                                 </td>
+                             </tr>
+                         </thead>
+                         <tbody>
+
+                         </tbody>
+                     </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-modal" id="modalEstimatelog">
+            <div class="uk-modal-dialog">
+                <div class="uk-modal-header uk-alert-success">รายละเอียดตั๋ว</div>
+                <div id="detailTicketEstimate">
+                     <table id="tableEstimateDetail" class="uk-table" border="1">
+                         <thead>
+                             <tr>
+                                 <td style="text-align: center">
+                                    ประเมินครั้งที่
+                                 </td>
+                                 <td style="text-align: center">
+                                     ตั๋ว
+                                 </td>
+                                 <td style="text-align: center">
+                                     ราคา
+                                 </td>
+                                 <td style="text-align: center">
+                                     ผู้ประเมิน
+                                 </td>
+                                 <td style="text-align: center">
+                                     วันที่
+                                 </td>
+                             </tr>
+                         </thead>
+                         <tbody>
+
+                         </tbody>
+                     </table>
+                </div>
+            </div>
+        </div>
+
     </form>
 </body>
 </html>
