@@ -9,6 +9,9 @@ Partial Class Main
         Dim UserName As String = "TOT00"
         Dim UserPwd As String = "1234"
 
+        'Dim UserName As String = "yok"
+        'Dim UserPwd As String = "193"
+
         Dim UserIPAddr As String = WebUtilFn.GetClientIPAddress(Request)
         Dim tokenObj As New PSCS.Libary.Models.TokenClass
         Dim pwsObj As New PawnWSShopService.PawnShopServices

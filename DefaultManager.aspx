@@ -61,6 +61,23 @@
             });
 
 
+            $('#formEstimate').validate({
+                rules: {
+                    firstEstimate: {
+                        required: true,
+                        digits: true
+                    }
+                },
+                messages: {
+                    firstEstimate: " กรุณากรอกราคาประเมินและต้องเป็นค่าตัวเลข"
+                }
+                ,
+                submitHandler: function (form) {
+
+                    AlertModal("modalSecret");
+                }
+            });
+
         });
 
         function LoadDataByEventByBranch(eventid) {
@@ -136,7 +153,77 @@
                 }
             });
         }
+        
 
+        function CheckConfirmCode() {
+
+            var code = $('#confirmCode').val();
+
+            $.ajax({
+                method: "POST",
+                url: "ajax/CheckPrivateCode.aspx",
+                data: "confirmcodeval=" + code,
+                success: function (data) {
+                    if (data == 'OK') {
+                        UpdateEstimate();
+                      
+                       //AlertModal("modalAlertSuccess")
+                    } else {
+                        alert(data);
+                    }
+                }
+            });
+
+        }
+
+
+        function UpdateEstimate() {
+            var arrData = [];
+            $('#tableData tbody tr').each(function () {
+                var currentRow = $(this);
+
+                var id = currentRow.find("td:eq(0)").text();
+                var TicketId = currentRow.find("td:eq(1)").text();
+                var BookNo = currentRow.find("td:eq(2)").text();
+                var TicketNo = currentRow.find("td:eq(3)").text();
+                //var CreateDate = currentRow.find("td:eq(4)").text();
+                var Amount = currentRow.find("td:eq(5)").text();
+                var FirstEstimate = currentRow.find('input[name=firstEstimate]').val();
+                var SecondEstimate = currentRow.find("td:eq(7)").text();
+                var ReportNo = currentRow.find("td:eq(8)").text();
+
+                var obj = {};
+                obj.id = id;
+                obj.TicketId = TicketId;
+                obj.BookNo = BookNo;
+                obj.TicketNo = TicketNo;
+                //obj.CreateDate = CreateDate;
+                obj.Amount = Amount;
+                obj.FirstEstimate = FirstEstimate;
+                obj.SecondEstimate = SecondEstimate;
+                obj.ReportNo = ReportNo;
+
+                arrData.push(obj);
+            });
+            $.ajax({
+                url: "ajax/UpdateEstimate.aspx",
+                method: "POST",
+                dataType: "json",
+                data: JSON.stringify(arrData),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if ($.trim(data).toString() == 'Success') {
+
+                    }
+                },
+            });
+            $('#lblAlert').text("ประเมินตั๋วเรียบร้อย");
+            AlertModal("modalAlertSuccess");
+            //loadGrid();
+
+            var eventid = $('#ddlEvent option:selected').val();
+            LoadDataByEventByBranch(eventid);
+        }
 
         function LoadDataByEventByBranchDropDown() {
             $.ajax({
@@ -235,7 +322,8 @@
         <asp:HiddenField ID="hiddenBranch" runat ="server"  />
         <br /><br />
         <div class="uk-form">
-            <br />
+           <b>ประเมินครั้งที่ 1</b>
+            <hr />
            <table class ="uk-table">
                <tr>
                    <td>
@@ -294,6 +382,8 @@
 
             <button type="submit" class="uk-button uk-button-success" style="color: #ffffff">Update</button>
         </div>
+
+        <br /><br /><br /><br />
 
         <div class="uk-modal" id="modalDetail">
             <div class="uk-modal-dialog">
@@ -355,6 +445,42 @@
                 </div>
             </div>
         </div>
+
+        <div class="uk-modal" id="modalSecret">
+            <div class="uk-modal-dialog">
+                <div class="uk-modal-header uk-alert-success">กรุณากรอกรหัสความปลอดภัย</div>
+                <div class="uk-form uk-form-horizontal">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <input type="password" id="confirmCode" class="uk-form-width-medium" /><input type="button" id="btnPrivateCode" class="uk-button uk-button-success" style="color:#ffffff" value="ยืนยัน" onclick="CheckConfirmCode()" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div id='loadingmessage2' style='display: none'>
+                                    <img src="img/ajax-loader.gif" />
+                                </div>
+                            </td>
+                            <td>
+                                <p id="lblmodal"></p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="uk-modal" id="modalAlertSuccess">
+            <div class="uk-modal-dialog">
+                <div class="uk-modal-header uk-alert-success">แจ้งเตือน</div>
+                <asp:Label ID="lblAlert" runat="server"></asp:Label>
+            </div>
+        </div>
+
 
     </form>
 </body>

@@ -88,7 +88,7 @@
                     var dateEnd = $('#txtDateEnd').datepicker('getDate');
 
                     if (dateStart > dateEnd) {
-                        $('#lblAlert').text("ช่วงวันที่ไม่ถูกต้อง").css('color','red');
+                        $('#lblAlert').text("ช่วงวันที่เริ่มค้นหามากกว่าวันที่สิ้นสุด").css('color','red');
                         AlertModal("modalAlertSuccess");
                         return; 
                     } else {

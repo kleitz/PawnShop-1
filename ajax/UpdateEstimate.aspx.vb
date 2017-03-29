@@ -37,6 +37,7 @@ Partial Class ajax_UpdateEstimate
                     'Response.Write("Success")
                 Catch ex As Exception
                     Response.Write("Error" + data(value).TicketId + ":" + ex.ToString)
+                    Exit Sub
                 End Try
 
             Next
@@ -49,6 +50,7 @@ Partial Class ajax_UpdateEstimate
                     'Response.Write("Success")
                 Catch ex As Exception
                     Response.Write("Error" + data(value).TicketId + ":" + ex.ToString)
+                    Exit Sub
                 End Try
 
             Next
