@@ -47,8 +47,6 @@
                     default:
 
                 }
-
-
             });
 
             $('#ddlEvent').change(function () {
@@ -304,6 +302,7 @@
 
             });
         }
+
         function AlertModal(ModalName) {
             var modalName = "#" + ModalName;
             var modal = UIkit.modal(modalName);

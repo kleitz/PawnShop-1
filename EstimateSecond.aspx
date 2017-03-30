@@ -25,8 +25,160 @@
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
+            $('#panelEvent').hide();
+            $('#panelBranch').hide();
+            $('#lblChooseActivity').hide();
 
+            $('#ddlSelect').change(function () {
+                var branchId = $('#hiddenBranch').val();
+                var option = $('#ddlSelect option:selected').val();
+                switch (option) {
+                    case "all":
+                        $('#panelEvent').hide();
+                        $('#lblChooseActivity').hide();
+                        LoadAllInBranch();
+                        break;
+                    case "byevt":
+                        $('#tableData tbody').empty();
+                        $('#panelEvent').show();
+                        $('#lblChooseActivity').show();
+                        LoadDataByEventByBranchDropDown();
+                        break;
+                    default:
+
+                }
+            });
         });
+
+
+
+
+
+        function LoadDataByEventByBranchDropDown() {
+            $.ajax({
+                type: "POST",
+                url: "ajax/PopualteEventByBranch.aspx",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {},
+                success: function (data) {
+                    var ddlEvent = $('#ddlEvent');
+                    ddlEvent.empty().append('<option selected="selected" value="">กรุณาเลือกกิจกรรม</option>');
+                    $.each(data, function (key, value) {
+                        ddlEvent.append($("<option></option>").val(value.EventID).html(value.Detail));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+
+            return false;
+        }
+        function LoadAllInBranch() {
+            $('#loading').show();
+            $.ajax({
+                type: "POST",
+                url: "ajax/Default3.aspx",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $('#tableData tbody').empty();
+
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableData tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + (i + 1) + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center'>" + data[i].BookNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].CreatedDate + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Amount + "</td>" +
+                            "<td style='text-align:center'>" + data[i].FirstEstimate + "</td>" +
+                            "<td style='text-align:center'>" + "<input id='SecondEstimate' type='text' name='secondEstimate' class='uk-form-width-medium' value='" + data[i].SecondEstimate + "' />" + "</td>" +
+                            "<td style='text-align:center;display:none;' class='reportNo' >" + data[i].ReportNo + "</td>" +
+                            "<td style='text-align:center'><input type='button' value='รายละเอียด' style='color:#ffffff' class='uk-button uk-button-primary' onclick=\"getTicketDetail('" + data[i].TicketId + "')\"/> </td>" +
+                            "<td style='text-align:center'><input type='button' value='ประวัติการประเมิน' style='color:#ffffff' class='uk-button uk-button-success' onclick=\"getEstimatDetail('" + data[i].TicketId + "')\"/> </td>" +
+                        "</tr>"
+                         );
+                    }
+                    $('#loading').hide();
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+        function getTicketDetail(TicketID) {
+
+            data = "TicketID=" + TicketID;
+            $.ajax({
+                url: "ajax/DetailTicket.aspx",
+                data: data,
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#tableDetail tbody').empty();
+
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableDetail tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + data[i].TicketLine + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Name + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Description + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Quantity + "</td>" +
+                        "</tr>"
+                         );
+                    }
+                    AlertModal("modalDetail");
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+
+            });
+        }
+
+        function getEstimatDetail(TicketID) {
+            data = "TicketID=" + TicketID;
+            $.ajax({
+                url: "ajax/DetailEstimateLog.aspx",
+                data: data,
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#tableEstimateDetail tbody').empty();
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableEstimateDetail tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + data[i].EstimateNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Price + "</td>" +
+                            "<td style='text-align:center'>" + data[i].UserName + "</td>" +
+                            "<td style='text-align:center'>" + data[i].DateCreated + "</td>" +
+                        "</tr>"
+                         );
+                    }
+                    AlertModal("modalEstimatelog");
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+
+            });
+        }
+
+        function AlertModal(ModalName) {
+            var modalName = "#" + ModalName;
+            var modal = UIkit.modal(modalName);
+
+            if (modal.isActive()) {
+                modal.hide();
+            } else {
+                modal.show();
+            }
+        }
     </script>
 </head>
 <body>
@@ -61,6 +213,8 @@
                    <td>
                        <div id="panelEvent">
                            <select id="ddlEvent" name="DropdownEvents"></select>
+                       </div>
+                       <div id="panelBranch">
                            <select id="ddlBranch" name="DropdownBranch"></select>
                        </div>
                    </td>

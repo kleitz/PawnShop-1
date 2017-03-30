@@ -6,11 +6,11 @@ Partial Class Main
     Inherits System.Web.UI.Page
 
     Private Sub Main_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim UserName As String = "TOT00"
-        Dim UserPwd As String = "1234"
+        'Dim UserName As String = "TOT00"
+        'Dim UserPwd As String = "1234"
 
-        'Dim UserName As String = "yok"
-        'Dim UserPwd As String = "193"
+        Dim UserName As String = "TOT88"
+        Dim UserPwd As String = "1234"
 
         Dim UserIPAddr As String = WebUtilFn.GetClientIPAddress(Request)
         Dim tokenObj As New PSCS.Libary.Models.TokenClass
