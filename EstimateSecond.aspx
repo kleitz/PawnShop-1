@@ -26,8 +26,10 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#panelEvent').hide();
-            $('#panelBranch').hide();
             $('#lblChooseActivity').hide();
+
+            $('#panelBranch').hide();
+            $('#lblChooseBranch').hide();
 
             $('#ddlSelect').change(function () {
                 var branchId = $('#hiddenBranch').val();
@@ -36,6 +38,8 @@
                     case "all":
                         $('#panelEvent').hide();
                         $('#lblChooseActivity').hide();
+                        $('#panelBranch').hide();
+                        $('#lblChooseBranch').hide();
                         LoadAllInBranch();
                         break;
                     case "byevt":
@@ -48,11 +52,184 @@
 
                 }
             });
+
+            $('#ddlEvent').change(function () {
+                var eventid = $('#ddlEvent').val();
+                //var branchid = $('#ddlBranch').val();
+                $('#panelBranch').show();
+                $('#lblChooseBranch').show();
+                //LoadBranchByEvent(eventid);
+
+                if (eventid == '') {
+                    $('#tableData tbody').empty();
+                    $('#panelBranch').hide();
+                    $('#lblChooseBranch').hide();
+                } else {
+                    LoadBranchByEvent(eventid);
+                }
+            });
+
+            $('#ddlBranch').change(function () {
+                var eventid = $('#ddlEvent').val();
+                var branchid = $('#ddlBranch').val();
+               
+                if (branchid == '') {
+                    $('#tableData tbody').empty();
+                } else {
+                    LoadDataByEventByBranch(eventid, branchid);
+                }
+            });
+
+            $('#formSecondEstimate').validate({
+                rules: {
+                    secondEstimate: {
+                        required: true,
+                        digits: true
+                    }
+                },
+                messages: {
+                    secondEstimate: " กรุณากรอกราคาประเมินและต้องเป็นค่าตัวเลข"
+                }
+                ,
+                submitHandler: function (form) {
+
+                    AlertModal("modalSecret");
+                }
+            });
+
         });
 
 
+        function LoadDataByEventByBranch(eventid,branchid) {
+            var data = {
+                eventid: eventid,
+                branchid: branchid
+            };
+
+            $('#loading').show();
+            $.ajax({
+                type: "POST",
+                url: "ajax/getDataByEventByBranch2.aspx",
+                data: JSON.stringify(data),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    $('#tableData tbody').empty();
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableData tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + (i + 1) + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center'>" + data[i].BookNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].CreatedDate + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Amount + "</td>" +
+                            "<td style='text-align:center'>" + data[i].FirstEstimate + "</td>" +
+                            "<td style='text-align:center'>" + "<input id='SecondEstimate' type='text' name='secondEstimate' class='uk-form-width-medium' value='" + data[i].SecondEstimate + "' />" + "</td>" +
+                            "<td style='text-align:center;display:none;' class='reportNo' >" + data[i].ReportNo + "</td>" +
+                            "<td style='text-align:center'><input type='button' value='รายละเอียด' style='color:#ffffff' class='uk-button uk-button-primary' onclick=\"getTicketDetail('" + data[i].TicketId + "')\"/> </td>" +
+                            "<td style='text-align:center'><input type='button' value='ประวัติการประเมิน' style='color:#ffffff' class='uk-button uk-button-success' onclick=\"getEstimatDetail('" + data[i].TicketId + "')\"/> </td>" +
+                        "</tr>"
+                         );
+                    }
+                    $('#loading').hide();
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+        function LoadBranchByEvent(eventid) {
+            data = "eventid=" + eventid;
+            $.ajax({
+                method : "POST",
+                url : "ajax/LoadBranchByEvent.aspx",
+                data: data,
+                dataType: "json",
+                success: function (data) {
+                    var ddlBranch = $('#ddlBranch');
+                    ddlBranch.empty().append('<option selected="selected" value="">กรุณาเลือกสาขา</option>');
+                    $.each(data, function (key, value) {
+                        ddlBranch.append($("<option></option>").val(value.BranchID).html(value.Name));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
 
 
+        function CheckConfirmCode() {
+
+            var code = $('#confirmCode').val();
+
+            $.ajax({
+                method: "POST",
+                url: "ajax/CheckPrivateCode.aspx",
+                data: "confirmcodeval=" + code,
+                success: function (data) {
+                    if (data == 'OK') {
+                        UpdateEstimate();
+
+                        //AlertModal("modalAlertSuccess")
+                    } else {
+                        alert(data);
+                    }
+                }
+            });
+
+        }
+
+        function UpdateEstimate() {
+            var arrData = [];
+            $('#tableData tbody tr').each(function () {
+                var currentRow = $(this);
+
+                var id = currentRow.find("td:eq(0)").text();
+                var TicketId = currentRow.find("td:eq(1)").text();
+                var BookNo = currentRow.find("td:eq(2)").text();
+                var TicketNo = currentRow.find("td:eq(3)").text();
+                //var CreateDate = currentRow.find("td:eq(4)").text();
+                var Amount = currentRow.find("td:eq(5)").text();
+                var FirstEstimate = currentRow.find('td:eq(6)').text();
+                var SecondEstimate = currentRow.find("input[name=secondEstimate]").val();
+                var ReportNo = currentRow.find("td:eq(8)").text();
+
+                var obj = {};
+                obj.id = id;
+                obj.TicketId = TicketId;
+                obj.BookNo = BookNo;
+                obj.TicketNo = TicketNo;
+                //obj.CreateDate = CreateDate;
+                obj.Amount = Amount;
+                obj.FirstEstimate = FirstEstimate;
+                obj.SecondEstimate = SecondEstimate;
+                obj.ReportNo = ReportNo;
+
+                arrData.push(obj);
+            });
+            $.ajax({
+                url: "ajax/UpdateEstimate.aspx",
+                method: "POST",
+                dataType: "json",
+                data: JSON.stringify(arrData),
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if ($.trim(data).toString() == 'Success') {
+
+                    }
+                },
+            });
+            $('#lblAlert').text("ประเมินตั๋วเรียบร้อย");
+            AlertModal("modalAlertSuccess");
+            //loadGrid();
+
+            var eventid = $('#ddlEvent').val();
+            var branchid = $('#ddlBranch').val();
+            LoadDataByEventByBranch(eventid, branchid);
+        }
 
         function LoadDataByEventByBranchDropDown() {
             $.ajax({
@@ -214,6 +391,14 @@
                        <div id="panelEvent">
                            <select id="ddlEvent" name="DropdownEvents"></select>
                        </div>
+                   </td>
+                   <td>
+                       <div id="lblChooseBranch">
+                           <b>เลือกสาขา
+                           </b>
+                       </div>
+                   </td>
+                   <td>
                        <div id="panelBranch">
                            <select id="ddlBranch" name="DropdownBranch"></select>
                        </div>

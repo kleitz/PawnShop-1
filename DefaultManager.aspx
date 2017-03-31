@@ -50,11 +50,9 @@
             });
 
             $('#ddlEvent').change(function () {
-                //var branchId = $('#hiddenBranch').val();
-                var eventid = $('#ddlEvent option:selected').val();
 
+                var eventid = $('#ddlEvent option:selected').val();
                 LoadDataByEventByBranch(eventid);
-                //alert(eventid);
 
             });
 

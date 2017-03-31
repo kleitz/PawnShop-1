@@ -67,6 +67,12 @@ Public Class eventid
 End Class
 
 
+Public Class eventidBranch
+    Public Property eventid As String
+    Public Property branchid As Integer
+End Class
+
+
 
 
 
