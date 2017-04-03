@@ -19,13 +19,15 @@
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
 
-                var roleId = $('#hiddenRole').val();
-                if (roleId == 2) {
-                    $('#content').load("DefaultManager.aspx");
-                    //$('#content').load("Default3.aspx");
-                } else {
-                    $('#content').load("EstimateSecond.aspx");
-                }
+                //var roleId = $('#hiddenRole').val();
+                //if (roleId == 2) {
+                //    $('#content').load("DefaultManager.aspx");
+                //    //$('#content').load("Default3.aspx");
+                //} else {
+                //    $('#content').load("EstimateSecond.aspx");
+                //}
+                $('#content').load("MainEstimate.aspx");
+                
             });
 
             $('#listall').click(function () {
@@ -76,6 +78,8 @@
 
             });
 
+
+
         });
     </script>
 </head>
@@ -97,7 +101,7 @@
                 <li id="buyback"><a>ซื้อคืน</a></li>
                 <li id="auction"><a>ประมูลทรัพย์หลุด</a></li>
                 <li id="manageEvent"><a>จัดการกิจกรรม</a></li>
-                <li id=""><a></a></li>
+                <li id="report"><a>รายงาน</a></li>
                 <li id=""><a></a></li>
                 <li id=""><a></a></li>
                 <li id=""><a></a></li>

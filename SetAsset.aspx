@@ -43,6 +43,7 @@
             });
 
             $('#form1').validate({
+                onkeypress : false, 
                 rules: {
                     DropdownCategory: {
                         required: true
