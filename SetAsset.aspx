@@ -15,6 +15,9 @@
         .error {
             color: red;
         }
+        .tableCss{
+            width:100%
+        }
     </style>
     <script type="text/javascript">
 
@@ -43,8 +46,8 @@
             });
 
             $('#form1').validate({
-                onkeypress : false, 
                 rules: {
+                    
                     DropdownCategory: {
                         required: true
                     },
@@ -61,7 +64,6 @@
                     AddSet();
                     return false;
                 }
-
             });
         });
         
@@ -141,11 +143,20 @@
                 return $(this).text()
             }).get();
 
+            var eventid = $('#ddlEvent').val();
+
             if (ticketId == "") {
                 $('#lblAlert').text("กรุณากรอกเลขตั๋ว");
                 AlertModal("modalAlertSuccess");
                 return;
             }
+
+            if (eventid == "") {
+                $('#lblAlert').text("กรุณาเลือกกิจกรรมก่อน");
+                AlertModal("modalAlertSuccess");
+                return;
+            }
+
 
             var fLen = arr.length;
             for (i = 0; i < fLen; i++) {
@@ -156,7 +167,7 @@
                 }
             }
 
-            CheckTicket(ticketId);
+            CheckTicket(ticketId,eventid);
 
         }
 
@@ -193,25 +204,54 @@
         }
 
 
-        function CheckTicket(tid)
-        {
-            data = "tid=" + tid;
-            $.ajax({
-                url: "ajax/CheckTicketID.aspx",
-                method : "POST",
-                data: data,
-                success: function (data) {
-                    if (data == 'Success') {
-                        loadAddTicket(tid);
-                        $('#txtTicketNumber').val("");
-                    } else {
-                        $('#lblAlert').text("ไม่พบข้อมูล");
-                        $('#txtTicketNumber').val("");
-                        AlertModal("modalAlertSuccess");
+        //function CheckTicket(tid)
+        //{
+        //    data = "tid=" + tid;
+        //    $.ajax({
+        //        url: "ajax/CheckTicketID.aspx",
+        //        method : "POST",
+        //        data: data,
+        //        success: function (data) {
+        //            if (data == 'Success') {
+        //                loadAddTicket(tid);
+        //                $('#txtTicketNumber').val("");
+        //            } else if (data == 'Is Set') {
+        //                $('#lblAlert').text("ตั๋วใบนี้ได้ทำการจัดชุดไปแล้ว");
+        //                $('#txtTicketNumber').val("");
+        //                AlertModal("modalAlertSuccess");
+        //            } else if (data == 'Not Found') {
+        //                $('#lblAlert').text("ไม่พบข้อมูล");
+        //                $('#txtTicketNumber').val("");
+        //                AlertModal("modalAlertSuccess");
+        //            }
+        //        }
+        //    });
+        //}
+
+        function CheckTicket(tid,eventid) {
+            data = "tid=" + tid + "&eventid=" + eventid;
+                $.ajax({
+                    url: "ajax/CheckTicketID2.aspx",
+                    method : "POST",
+                    data: data,
+                    success: function (data) {
+                        if (data == 'Success') {
+                            loadAddTicket(tid);
+                            $('#txtTicketNumber').val("");
+                        } else if (data == 'Is Set') {
+                            $('#lblAlert').text("ตั๋วใบนี้ได้ทำการจัดชุดไปแล้ว");
+                            $('#txtTicketNumber').val("");
+                            AlertModal("modalAlertSuccess");
+                        } else if (data == 'Not Found') {
+                            $('#lblAlert').text("ไม่พบข้อมูล");
+                            $('#txtTicketNumber').val("");
+                            AlertModal("modalAlertSuccess");
+                        }
                     }
-                }
-            });
+                });
         }
+
+
         function loadSum() {
             $(document).ready(function () {
                 var sumQty = 0;
@@ -452,23 +492,30 @@
     </script>
 </head>
 <body>
-    <form id="form1" name="form1" >
-<%--        <asp:HiddenField ID="hddBranch" runat="server" />
-        <asp:HiddenField ID="hddMonth" runat="server" />
-        <asp:HiddenField ID="hddYear" runat="server" />--%>
+    <br /><br />
 
-<%--        <asp:Panel ID="panelInsertSet" runat="server" Visible="true">--%>
+
+
+    <div style="width:600px;margin-left:12px">
+        <div class="uk-form">
+            <table class="uk-table uk-table-condensed tableCss">
+                <tr>
+                    <td>
+                        <b>เลขตั๋ว</b>
+                    </td>
+                    <td>
+                        <input type="text" id="txtTicketNumber" onkeypress="AddTicketFromScanner(event)" />
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+    <form id="form1" name="form1">
+        <div style="width:600px">
             <div class="uk-form">
-                <table class="uk-table uk-table-condensed">
-                    <tr>
-                        <td>
-                            <b>เลขตั๋ว</b>
-                        </td>
-                        <td>
-                            <input type="text" id="txtTicketNumber" onkeypress="AddTicketFromScanner(event)" />
-                            <%--<input type="button" value="add" class="uk-button uk-button-success" onclick="AddTicket()" style="color:#ffffff" />--%>             
-                        </td>
-                    </tr>
+                <table class="uk-table uk-table-condensed tableCss">
                     <tr>
                         <td><b>ประเภทชุด</b></td>
                         <td>
@@ -488,52 +535,56 @@
                     <tr>
                         <td></td>
                         <td>
-                            <%--<input type="submit" value="จัดชุด" class="uk-button uk-button-success" onclick="AddSet()" style="color: #ffffff" />--%>
-<%--                            <button type="submit" class="uk-button uk-button-success"  style="color: #ffffff">จัดชุด</button>--%>
+
 
                             <button id="btnAddSet" class="uk-button uk-button-success" type="submit" style="color: #ffffff" >จัดชุด</button>    
    
                         </td>
                     </tr>
                 </table>
-                <table id="tableData" class="uk-table" border="1">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center">เลขตั๋ว</th>
-                            <th style="text-align: center">ประเภท</th>
-                            <th style="text-align: center">เลขที่</th>
-                            <th style="text-align: center">เล่มที่</th>
-                            <th style="text-align: center">จำนวน</th>
-                            <th style="text-align: center">น้ำหนัก(กรัม)</th>
-                            <th style="text-align: center">ราคารับจำนำ(บาท)</th>
-                            <th style="text-align: center">ราคาประเมิน(บาท)</th>
-                            <th style="text-align: center">ลบ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td style="text-align: center"><b>รวม</b></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: center">
-                                <input id="totalQty" type="text" />
-                            </td>
-                            <td style="text-align: center">
-                                <input id="totalWeight" type="text" />
-                            </td>
-                            <td style="text-align: center">
-                                <input id="totalAmt" type="text" />
-                            </td>
-                            <td style="text-align: center">
-                                <input id="totalEstimate" type="text" />
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+
             </div>
-<%--        </asp:Panel>--%>
+        </div>
+
+        <div class="uk-form">
+            <table id="tableData" class="uk-table" border="1">
+                <thead>
+                    <tr>
+                        <th style="text-align: center">เลขตั๋ว</th>
+                        <th style="text-align: center">ประเภท</th>
+                        <th style="text-align: center">เลขที่</th>
+                        <th style="text-align: center">เล่มที่</th>
+                        <th style="text-align: center">จำนวน</th>
+                        <th style="text-align: center">น้ำหนัก(กรัม)</th>
+                        <th style="text-align: center">ราคารับจำนำ(บาท)</th>
+                        <th style="text-align: center">ราคาประเมิน(บาท)</th>
+                        <th style="text-align: center">ลบ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td style="text-align: center"><b>รวม</b></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center">
+                            <input id="totalQty" type="text" />
+                        </td>
+                        <td style="text-align: center">
+                            <input id="totalWeight" type="text" />
+                        </td>
+                        <td style="text-align: center">
+                            <input id="totalAmt" type="text" />
+                        </td>
+                        <td style="text-align: center">
+                            <input id="totalEstimate" type="text" />
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
         <br />
         <br />
 
@@ -648,14 +699,21 @@
                 var setID = $('#hSetID').val();
                 var username = $('#hUsername').val();
 
+                var evetid = $('#ddlEvent').val();
+
                 if (ticketid == '') {
                     //$('#lblAlert').text("กรุณากรอกข้อมูล");
                     //AlertModal("modalAlertSuccess");
                     $('#lblAlertTicketStatus').text("กรุณากรอกข้อมูล").css('color', 'red');
                     return; 
                 }
+
+                if (evetid == '') {
+                    $('#lblAlertTicketStatus').text("กรุณาเลือก Event ก่อน ").css('color', 'red');
+                    return;
+                }
                    
-                checkTicket(ticketid);
+                checkTickets(ticketid);
 
             });
 
@@ -700,7 +758,7 @@
                     }
                 });
             }
-            function checkTicket(tid) {
+            function checkTickets(tid) {
                 data = "tid=" + tid;
                 var setID = $('#hSetID').val();
                 var username = $('#hUsername').val();

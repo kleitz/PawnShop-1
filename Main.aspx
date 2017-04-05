@@ -96,7 +96,7 @@
                 <li id="TicketIn"><a>เอาตั๋วเข้ากิจกรรม</a></li>
                 <li id="estimate"><a>ประเมินราคาตั๋ว</a></li>
                 <li id="listall"><a>รายการทรัพย์หลุดทั้งหมด</a></li>
-                <li id="manage"><a>จัดการทรัพย์หลุด</a></li>
+                <li id="manage"><a>จัดชุด</a></li>
                 <li id="managetray"><a>จัดถาด</a></li>
                 <li id="buyback"><a>ซื้อคืน</a></li>
                 <li id="auction"><a>ประมูลทรัพย์หลุด</a></li>
