@@ -1,15 +1,16 @@
-﻿Imports System.IO
+﻿Imports System.Data
+Imports Newtonsoft.Json
+Imports System.IO
 Imports System.Collections.Generic
 Imports System.Exception
 Imports PSCS.Libary.Models
 Imports DataConnection.DataAccessClassAsset
-Imports System.Data
-Partial Class CheckTicketID2
+Partial Class ajax_CheckTicketID2
     Inherits System.Web.UI.Page
 
-    Private Sub CheckTicketID2_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim TicketId As String = Request.Form("tid")
-        Dim EventId As String = Request.Form("eventid")
+    Private Sub ajax_CheckTicketID2_Load(sender As Object, e As EventArgs) Handles Me.Load
+        Dim TicketId As String = Request.Form("tid").Trim()
+        Dim EventId As String = Request.Form("eventid").Trim()
         Dim dt As New DataTable
         dt = CheckIsAsset2(TicketId, EventId)
         Dim dt2 As New DataTable

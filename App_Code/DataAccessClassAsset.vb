@@ -1502,7 +1502,7 @@ Namespace DataConnection
             cmd.CommandType = CommandType.StoredProcedure
             cmd.CommandText = """sp_CheckIsAsset2"""
             cmd.Parameters.Add(New OracleParameter("vTicketId", OracleDbType.Varchar2)).Value = vTicketID
-            cmd.Parameters.Add(New OracleParameter("vEventId", OracleDbType.Varchar2)).Value = vTicketID
+            cmd.Parameters.Add(New OracleParameter("vEventId", OracleDbType.Varchar2)).Value = vEventId
             cmd.Parameters.Add(New OracleParameter("TicketInfo", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
             Try
                 da.SelectCommand = cmd

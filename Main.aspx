@@ -78,7 +78,12 @@
 
             });
 
+            $('#report').click(function () {
+                $(this).addClass('uk-active');
+                $('li').not($(this)).removeClass('uk-active');
+                $('#content').load("ReportMain.aspx");
 
+            });
 
         });
     </script>
