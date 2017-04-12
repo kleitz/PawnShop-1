@@ -32,6 +32,10 @@ Public Class CrytalBuild
 
         Dim tstr As String
 
+        ' Dim sReportPath As String = HttpContext.Current.Request.ServerVariables _
+        '("APPL_PHYSICAL_PATH") &
+        '"\CrystalReport\" & sReport
+
         Dim sReportPath As String = HttpContext.Current.Request.ServerVariables _
        ("APPL_PHYSICAL_PATH") &
        "\CrystalReport\" & sReport
@@ -44,9 +48,6 @@ Public Class CrytalBuild
 
             crDatabase = oRpt.Database
             crTables = crDatabase.Tables
-
-
-
 
 
             For Each crTable In crTables

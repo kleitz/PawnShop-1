@@ -9,13 +9,29 @@
     <link href="css/uikit.min.css" rel="stylesheet" type="text/css" />
     <link href="css/GridStyle.css" rel="stylesheet" />
     <title>::ระบบจัดการทรัพย์หลุด::</title>
+    <script type ="text/javascript">
+        $(document).ready(function () {
+            $('#byticketid').click(function () {
+                $(this).addClass('uk-active');
+                $('li').not($(this)).removeClass('uk-active');
+                $('#content2').load("Report/Report_5621.aspx");
+            });
 
+            $('#byticketidNo').click(function () {
+                $(this).addClass('uk-active');
+                $('li').not($(this)).removeClass('uk-active');
+                $('#content2').load("Report/Report_5622.aspx");
+            });
+        });
+    </script>
 </head>
 <body>
     <form id="form1" runat="server">
-    <div>
-
-    </div>
+        <ul class="uk-tab">
+             <li id="byticketid"><a>ประเมินราคาทรัพย์หลุดรายตั๋ว</a></li>
+            <li id="byticketidNo"><a>ประเมินราคาทรัพย์หลุดรายตั๋วไม่มีงวด</a></li>
+        </ul>
+        <div id="content2"></div>
     </form>
 </body>
 </html>

@@ -1864,7 +1864,31 @@ Namespace DataConnection
             Return dt
         End Function
 
+        Public Shared Function getPeriodNo(ByVal pBranchID As Integer, ByVal pYear As String, ByVal pMonth As String) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """AP_Report5621GetPeriodNo"""
+            cmd.Parameters.Add(New OracleParameter("vBranchID", OracleDbType.Int32)).Value = pBranchID
+            cmd.Parameters.Add(New OracleParameter("vYear", OracleDbType.Varchar2)).Value = pYear
+            cmd.Parameters.Add(New OracleParameter("vMonth", OracleDbType.Varchar2)).Value = pMonth
+            cmd.Parameters.Add(New OracleParameter("cur", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
 
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+        End Function
     End Class
 End Namespace
 
