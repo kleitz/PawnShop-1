@@ -22,14 +22,28 @@
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content2').load("Report/Report_5622.aspx");
             });
+
+            $('#byticketCategory').click(function () {
+                $(this).addClass('uk-active');
+                $('li').not($(this)).removeClass('uk-active');
+                $('#content2').load("Report/Report_5623.aspx");
+            });
+
+            $('#byticketCategory2').click(function () {
+                $(this).addClass('uk-active');
+                $('li').not($(this)).removeClass('uk-active');
+                $('#content2').load("Report/Report_5624.aspx");
+            });
         });
     </script>
 </head>
 <body>
     <form id="form1" runat="server">
         <ul class="uk-tab">
-             <li id="byticketid"><a>ประเมินราคาทรัพย์หลุดรายตั๋ว</a></li>
+            <li id="byticketid"><a>ประเมินราคาทรัพย์หลุดรายตั๋ว</a></li>
             <li id="byticketidNo"><a>ประเมินราคาทรัพย์หลุดรายตั๋วไม่มีงวด</a></li>
+            <li id="byticketCategory"><a>บัญชีประเมินทรัพย์หลุดเรียงประเภททรัพย์</a></li>
+            <li id="byticketCategory2"><a>บัญชีจำหน่ายทรัพย์หลุดเรียงตามประเภททรัพย์</a></li>
         </ul>
         <div id="content2"></div>
     </form>
