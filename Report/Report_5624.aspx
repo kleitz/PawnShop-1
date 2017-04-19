@@ -71,26 +71,6 @@
                 }
             });
         }
-        function LoadPeriod(branch, month, year) {
-            //var year = year - 543;
-            data = "month=" + month + "&year=" + year + "&branch=" + branch;
-            $.ajax({
-                url: "ajax/LoadPeriod.aspx",
-                contentType: "application/json; charset=utf-8",
-                data: data,
-                dataType: "json",
-                success: function (data) {
-                    var ddlperiod = $('#ddlperiod');
-                    ddlperiod.empty().append('<option selected="selected" value="">กรุณาเลือกงวด</option>');
-                    $.each(data, function (key, value) {
-                        ddlperiod.append($("<option></option>").val(value.PeriodNo).html(value.PeriodNo));
-                    });
-                },
-                error: function ajaxError(result) {
-                    alert(result.status + ":" + result.statusText);
-                }
-            });
-        }
 
     </script>
 </head>

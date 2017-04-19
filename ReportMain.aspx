@@ -34,6 +34,12 @@
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content2').load("Report/Report_5624.aspx");
             });
+
+            $('#byticketNotBuy').click(function () {
+                $(this).addClass('uk-active');
+                $('li').not($(this)).removeClass('uk-active');
+                $('#content2').load("Report/Report_5627.aspx");
+            });
         });
     </script>
 </head>
@@ -44,6 +50,7 @@
             <li id="byticketidNo"><a>ประเมินราคาทรัพย์หลุดรายตั๋วไม่มีงวด</a></li>
             <li id="byticketCategory"><a>บัญชีประเมินทรัพย์หลุดเรียงประเภททรัพย์</a></li>
             <li id="byticketCategory2"><a>บัญชีจำหน่ายทรัพย์หลุดเรียงตามประเภททรัพย์</a></li>
+            <li id="byticketNotBuy"><a>บัญชีทรัพย์หลุดที่จำหน่ายไม่ได้</a></li>
         </ul>
         <div id="content2"></div>
     </form>
