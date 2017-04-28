@@ -30,7 +30,7 @@ Partial Class Main
 
         Dim tokenOb As New PSCS.Libary.Models.TokenClass
         If Not PawnUtilFn.GetSessionUserObj(tokenOb) Then
-            Response.Redirect("../../../login.aspx")
+            Response.Redirect("~/login.aspx")
             Exit Sub
         End If
 

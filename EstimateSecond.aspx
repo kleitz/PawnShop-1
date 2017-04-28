@@ -226,9 +226,9 @@
             AlertModal("modalAlertSuccess");
             //loadGrid();
 
-            var eventid = $('#ddlEvent').val();
-            var branchid = $('#ddlBranch').val();
-            LoadDataByEventByBranch(eventid, branchid);
+            //var eventid = $('#ddlEvent').val();
+            //var branchid = $('#ddlBranch').val();
+            //LoadDataByEventByBranch(eventid, branchid);
         }
 
         function LoadDataByEventByBranchDropDown() {
