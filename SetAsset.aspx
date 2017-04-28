@@ -203,31 +203,6 @@
             });
         }
 
-
-        //function CheckTicket(tid)
-        //{
-        //    data = "tid=" + tid;
-        //    $.ajax({
-        //        url: "ajax/CheckTicketID.aspx",
-        //        method : "POST",
-        //        data: data,
-        //        success: function (data) {
-        //            if (data == 'Success') {
-        //                loadAddTicket(tid);
-        //                $('#txtTicketNumber').val("");
-        //            } else if (data == 'Is Set') {
-        //                $('#lblAlert').text("ตั๋วใบนี้ได้ทำการจัดชุดไปแล้ว");
-        //                $('#txtTicketNumber').val("");
-        //                AlertModal("modalAlertSuccess");
-        //            } else if (data == 'Not Found') {
-        //                $('#lblAlert').text("ไม่พบข้อมูล");
-        //                $('#txtTicketNumber').val("");
-        //                AlertModal("modalAlertSuccess");
-        //            }
-        //        }
-        //    });
-        //}
-
         function CheckTicket(tid,eventid) {
             data = "tid=" + tid + "&eventid=" + eventid;
                 $.ajax({
