@@ -32,8 +32,16 @@
                 todayHighlight: true,
                 //endDate: '0d'
             });
-
+            loadYear();
+            loadMonth();
             loadActivity();
+
+            //$('#ddlMonth').change(function () {
+            //    //var branchId = $('#ddlBranch').val();
+            //    var month = $('#ddlMonths').val();
+            //    var year = $('#ddlyears').val();
+            //    //LoadPeriod(branchId, month, year);
+            //});
 
             $('#chkall').change(function () {
                 $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
@@ -54,8 +62,8 @@
                             $('#tableDataTicket tbody').append(
                             "<tr>" +
                                 "<td style='text-align:center'>" + (i + 1) + "</td>" +
-                                "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
-                                "<td style='text-align:center'>" + data[i].DateCreated+ "</td>" +
+                                "<td style='text-align:center'>" + data[i].TicketInfo + "</td>" +
+                                "<td style='text-align:center'>" + data[i].periodDay + " " + data[i].monthThai + " " + data[i].periodThaiYear + "</td>" +
                                 "<td style='text-align:center'>" + data[i].Username + "</td>" +
                                 "<td style='text-align:center'><input class='chkOut' type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
                             "</tr>"
@@ -176,6 +184,69 @@
             });
         }
 
+
+        function loadYear() {
+            $.ajax({
+                type: "POST",
+                url: "ajax/LoadYear.aspx",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var ddlyears = $('#ddlyears');
+                    ddlyears.empty().append('<option selected="selected" value="">กรุณาเลือกปี</option>');
+                    $.each(data, function (key, value) {
+                        ddlyears.append($("<option></option>").val(value.periodYear).html(value.periodThaiYear));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+        function loadMonth() {
+            $.ajax({
+                type: "POST",
+                url: "ajax/LoadMonth.aspx",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var ddlMonths = $('#ddlMonths');
+                    ddlMonths.empty().append('<option selected="selected" value="">กรุณาเลือกเดือน</option>');
+                    $.each(data, function (key, value) {
+                        ddlMonths.append($("<option></option>").val(value.periodMonth).html(value.monthThai));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+        function LoadPeriod(month, year) {
+
+            data = "month=" + month + "&year=" + year ;
+            $.ajax({
+                url: "ajax/LoadPeriod2.aspx",
+                contentType: "application/json; charset=utf-8",
+                data: data,
+                dataType: "json",
+                success: function (data) {
+                    var ddlPeriod = $('#ddlPeriod');
+                    ddlPeriod.empty().append('<option selected="selected" value="">กรุณาเลือกงวด</option>');
+                    $.each(data, function (key, value) {
+                        ddlPeriod.append($("<option></option>").val(value.PeriodNo).html(value.PeriodNo));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+
         function AddTicketOnEvent() {
             
             var eventid = $('#ddlEvent').val();
@@ -273,12 +344,10 @@
          <tr>
              <td>
                  <b>เลือกกิจกรรม</b>
-             </td>
-             <td>
                  <select id="ddlEvent" name="DropdownEvents"></select>
              </td>
          </tr>
-         <tr>
+<%--         <tr>
              <td>
                  <b> ตั๋วทรัพย์หลุดตั้งแต่วันที่ </b>
              </td>
@@ -295,6 +364,16 @@
              <td>
                  <button id="btnSearch" class="uk-button uk-button-primary" type="submit" style="color: #ffffff" >ค้นหา</button>
                  <input type="button" value="Reset" class="uk-button uk-button-primary" style="color:#ffffff" onclick="ResetTicket()" />
+             </td>
+         </tr>--%>
+         <tr>
+             <td>
+                 <b>ปี</b>
+                 <select id="ddlyears" name="Dropdownyear"></select>
+                 <b>เดือน</b>
+                 <select id="ddlMonths" name="DropdownMonth"></select>
+                 <b>งวด</b>
+                 <select id="ddlPeriod" name="DropdownPeriod"></select>
              </td>
          </tr>
      </table>
@@ -340,7 +419,7 @@
          <thead>
              <tr>
                  <th style="text-align: center">ลำดับ</th>
-                 <th style="text-align: center">เลขตั๋ว</th>
+                 <th style="text-align: center">เล่มที่/เลขที่</th>
                  <th style="text-align: center">นำเข้าเมื่อวันที่</th>
                  <th style="text-align: center">ผู้ดำเนินการ</th>
                  <th style="text-align: center"><input type="checkbox" id="chkOut" name="chkOut"/></th>

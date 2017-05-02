@@ -14,73 +14,76 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#estimate').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
-
-                //var roleId = $('#hiddenRole').val();
-                //if (roleId == 2) {
-                //    $('#content').load("DefaultManager.aspx");
-                //    //$('#content').load("Default3.aspx");
-                //} else {
-                //    $('#content').load("EstimateSecond.aspx");
-                //}
                 $('#content').load("MainEstimate.aspx");
-                
+                $('#loadingmessageMain').hide();
             });
 
             $('#listall').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("ListAll.aspx");
+                $('#loadingmessageMain').hide();
             });
 
             $('#manage').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("SetAsset.aspx");
-
+                $('#loadingmessageMain').hide();
             });
 
             $('#buyback').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("BuyBack.aspx");
+                $('#loadingmessageMain').hide();
             });
 
             $('#auction').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("Auction.aspx");
-
+                $('#loadingmessageMain').hide();
             });
 
             $('#managetray').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("Managetray.aspx");
-
+                $('#loadingmessageMain').hide();
             });
 
 
             $('#manageEvent').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("ManageEvent.aspx");
-
+                $('#loadingmessageMain').hide();
             });
 
             $('#TicketIn').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("TicketIn.aspx");
-
+                $('#loadingmessageMain').hide();
             });
 
             $('#report').click(function () {
+                $('#loadingmessageMain').show();
                 $(this).addClass('uk-active');
                 $('li').not($(this)).removeClass('uk-active');
                 $('#content').load("ReportMain.aspx");
-
+                $('#loadingmessageMain').hide();
             });
 
         });
@@ -119,6 +122,9 @@
             </ul>
         </div>
         <div class="uk-width-3-5">
+            <div id='loadingmessageMain' style='display: none'>
+                <img src="img/ajax-loader.gif" />
+            </div>
 
             <div id="content"></div>
         </div>

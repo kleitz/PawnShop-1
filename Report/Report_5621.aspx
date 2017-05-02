@@ -51,8 +51,8 @@
                 }
             });
         }
-        function LoadPeriod(branch,month, year) {
-            //var year = year - 543;
+        function LoadPeriod(branch, month, year) {
+
             data = "month=" + month + "&year=" + year + "&branch=" + branch;
             $.ajax({
                 url: "ajax/LoadPeriod.aspx",
