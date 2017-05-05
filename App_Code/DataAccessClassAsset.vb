@@ -1917,7 +1917,7 @@ Namespace DataConnection
             Dim da As New OracleDataAdapter
             Dim con As New OracleConnection
             Dim cmd As New OracleCommand
-            con = getPwAssetConnection()
+            con = getConnection()
             cmd.Connection = con
             cmd.CommandType = CommandType.StoredProcedure
             cmd.CommandText = """sp_getMonthForTicketIn"""
@@ -1927,7 +1927,34 @@ Namespace DataConnection
                 da.SelectCommand = cmd
                 da.Fill(dt)
             Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
+            Finally
+                con.Close()
+            End Try
 
+            Return dt
+        End Function
+
+        Public Shared Function getTicketForEvent2(ByVal pBranchID As Integer, ByVal pYear As String, ByVal pMonth As String, ByVal periodNo As Integer) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_getTicketForEvent2"""
+            cmd.Parameters.Add(New OracleParameter("vBranchID", OracleDbType.Int32)).Value = pBranchID
+            cmd.Parameters.Add(New OracleParameter("vMonth", OracleDbType.Varchar2)).Value = pMonth
+            cmd.Parameters.Add(New OracleParameter("vYear", OracleDbType.Varchar2)).Value = pYear
+            cmd.Parameters.Add(New OracleParameter("vPeriodNo", OracleDbType.Int32)).Value = periodNo
+            cmd.Parameters.Add(New OracleParameter("TicketInfo", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
             Finally
                 con.Close()
             End Try

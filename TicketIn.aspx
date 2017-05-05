@@ -25,26 +25,34 @@
     <title>::ระบบจัดการทรัพย์หลุด::</title>
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#txtDateStart,#txtDateEnd').datepicker({
-                format: "dd/mm/yyyy",
-                language: "th-th",
-                autoclose: true,
-                todayHighlight: true,
-                //endDate: '0d'
-            });
+
             loadYear();
             loadMonth();
-            loadActivity();
+            
+            //loadActivity();
 
-            //$('#ddlMonth').change(function () {
-            //    //var branchId = $('#ddlBranch').val();
-            //    var month = $('#ddlMonths').val();
-            //    var year = $('#ddlyears').val();
-            //    //LoadPeriod(branchId, month, year);
-            //});
+            //if ($('#checkEvent').is(':checked')) {
+            //    loadActivity();
+            //} else {
+
+            //}
+            
+            $('#checkEvent').change(function () {
+                var chk = this.checked ? loadActivity() : '';
+            });
+
+            $('#ddlMonths').change(function () {
+                var month = $('#ddlMonths').val();
+                var year = $('#ddlyears').val();
+                LoadPeriod(month, year);
+            });
 
             $('#chkall').change(function () {
-                $('tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+                $('#tableData tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
+            });
+
+            $('#chkOut').change(function () {
+                $('#tableDataTicket tbody tr td input[type="checkbox"]').prop('checked', $(this).prop('checked'));
             });
 
             $('#ddlEvent').change(function () {
@@ -62,7 +70,11 @@
                             $('#tableDataTicket tbody').append(
                             "<tr>" +
                                 "<td style='text-align:center'>" + (i + 1) + "</td>" +
+                                "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
                                 "<td style='text-align:center'>" + data[i].TicketInfo + "</td>" +
+                                "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
+                                "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
+                                "<td style='text-align:center'>" + data[i].PeriodNo + "</td>" +
                                 "<td style='text-align:center'>" + data[i].periodDay + " " + data[i].monthThai + " " + data[i].periodThaiYear + "</td>" +
                                 "<td style='text-align:center'>" + data[i].Username + "</td>" +
                                 "<td style='text-align:center'><input class='chkOut' type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
@@ -80,29 +92,27 @@
                     DropdownEvents: {
                         required: true
                     },
-                    txtDateStart: {
+                    Dropdownyear: {
                         required: true
                     },
-                    txtDateEnd: {
+                    DropdownMonth: {
+                        required: true
+                    },
+                    DropdownPeriod : {
                         required: true
                     }
                 }, messages: {
                     DropdownEvents: "กรุณาเลือกกิจกรรม",
-                    txtDateStart: "กรุณาเลือกวันที่เริ่มต้น",
-                    txtDateEnd: "กรุณาเลือกวันที่สิ้นสุด"
+                    Dropdownyear: "กรุณาเลือกปี",
+                    DropdownMonth: "กรุณเลือกเดือน",
+                    DropdownPeriod : "กรุณาเลือกงวด"
+        
                 }, submitHandler: function (form) {
-
-                    var dateStart = $('#txtDateStart').datepicker('getDate');
-                    var dateEnd = $('#txtDateEnd').datepicker('getDate');
-
-                    if (dateStart > dateEnd) {
-                        $('#lblAlert').text("ช่วงวันที่เริ่มค้นหามากกว่าวันที่สิ้นสุด").css('color','red');
-                        AlertModal("modalAlertSuccess");
-                        return; 
-                    } else {
-                       LoadTicket();
-                    }
-                   
+                    
+                    LoadTicket();
+                    
+                    return false; 
+        
                 }
             });
 
@@ -123,8 +133,12 @@
                         $('#tableDataTicket tbody').append(
                         "<tr>" +
                             "<td style='text-align:center'>" + (i + 1) + "</td>" +
-                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
-                            "<td style='text-align:center'>" + data[i].DateCreated + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center'>" + data[i].TicketInfo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].PeriodNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodDay + " " + data[i].monthThai + " " + data[i].periodThaiYear + "</td>" +
                             "<td style='text-align:center'>" + data[i].Username + "</td>" +
                             "<td style='text-align:center'><input class='chkOut' type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
                         "</tr>"
@@ -137,13 +151,13 @@
 
 
         function LoadTicket() {
-            $('#loadingmessage3').show();
-            var dateStart = $('#txtDateStart').val();
-            var dateEnd = $('#txtDateEnd').val();
-            data = "dateStart=" + dateStart + "&dateEnd=" + dateEnd;
+            var year = $('#ddlyears').val();
+            var month = $('#ddlMonths').val();
+            var period = $('#ddlPeriod').val();
+            data = "year=" + year + "&month=" + month + "&period=" + period;
             $.ajax({
                 type: "POST",
-                url: "ajax/LoadTicketForEvent.aspx",
+                url: "ajax/LoadTicketForEvent2.aspx",
                 data: data,
                 dataType: "json",
                 success: function (data) {
@@ -152,9 +166,9 @@
                         $('#tableData tbody').append(
                         "<tr>" +
                             "<td style='text-align:center'>" + (i + 1) + "</td>" +
-                            "<td style='text-align:center'>" + data[i].BookNo + "</td>" +
-                            "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
-                            "<td style='text-align:center'>" + data[i].TicketStarted + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center'>" + data[i].BookNo + "/" + data[i].TicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodDay + " " + data[i].monthThai + " " + data[i].periodThaiYear + "</td>" +
                             "<td style='text-align:center'><input class='chk'  type='checkbox' value = '" + data[i].TicketId + "' /></td>" +
                         "</tr>"
                             );
@@ -162,7 +176,8 @@
                     $('#loadingmessage3').hide();
                 }
             });
-            
+
+            $("#chkall").prop("checked", false);
         }
         function loadActivity() {
             $.ajax({
@@ -279,6 +294,7 @@
                         }
                     }
                 });
+                $("#chkall").prop("checked", false);
             }
 
         }
@@ -314,13 +330,9 @@
                         }
                     }
                 });
+
+                $("#chkOut").prop("checked", false);
             }
-        }
-        function ResetTicket() {
-            $('#ddlEvent').val("");
-            $('#txtDateStart').val("");
-            $('#txtDateEnd').val("");
-            $('#tableData tbody').empty();
         }
 
         function AlertModal(ModalName) {
@@ -344,28 +356,10 @@
          <tr>
              <td>
                  <b>เลือกกิจกรรม</b>
-                 <select id="ddlEvent" name="DropdownEvents"></select>
+                 <select id="ddlEvent" name="DropdownEvents"></select>&nbsp;&nbsp;
+                 <input type="checkbox" name="checkEvent" id="checkEvent"/>&nbsp;&nbsp;<b>รวมกิจกรรมที่ผ่านมาแล้ว</b>
              </td>
          </tr>
-<%--         <tr>
-             <td>
-                 <b> ตั๋วทรัพย์หลุดตั้งแต่วันที่ </b>
-             </td>
-             <td>
-                 
-                 <input id="txtDateStart" name="txtDateStart" type="text"  />
-             </td>
-             <td>
-                 <b> ถึงวันที่</b>
-             </td>
-             <td>
-                 <input id="txtDateEnd" name="txtDateEnd" type="text"  />
-             </td>
-             <td>
-                 <button id="btnSearch" class="uk-button uk-button-primary" type="submit" style="color: #ffffff" >ค้นหา</button>
-                 <input type="button" value="Reset" class="uk-button uk-button-primary" style="color:#ffffff" onclick="ResetTicket()" />
-             </td>
-         </tr>--%>
          <tr>
              <td>
                  <b>ปี</b>
@@ -374,6 +368,7 @@
                  <select id="ddlMonths" name="DropdownMonth"></select>
                  <b>งวด</b>
                  <select id="ddlPeriod" name="DropdownPeriod"></select>
+                 <button id="btnSearch" class="uk-button uk-button-primary" type="submit" style="color: #ffffff" >ค้นหา</button>
              </td>
          </tr>
      </table>
@@ -388,10 +383,11 @@
         <thead>
             <tr>
                 <th style="text-align: center">ลำดับ</th>
-                <th style="text-align: center">เลมที่</th>
-                <th style="text-align: center">เลขที่</th>
+                <th style="text-align: center;display:none">เลขตั๋ว</th>
+                <th style="text-align: center">เล่มที่/เลขที่</th>
                 <th style="text-align: center">วันที่ออกตั๋ว</th>
-                <th style="text-align: center"><input type="checkbox" id="chkall" name="chkall"/></th>
+                <th style="text-align: center">
+                <input type="checkbox" id="chkall" name="chkall" /></th>
             </tr>
         </thead>
         <tbody>
@@ -420,6 +416,9 @@
              <tr>
                  <th style="text-align: center">ลำดับ</th>
                  <th style="text-align: center">เล่มที่/เลขที่</th>
+                 <th style="text-align: center">เดือน</th>
+                 <th style="text-align: center">ปี</th>
+                 <th style="text-align: center">งวดที่</th>
                  <th style="text-align: center">นำเข้าเมื่อวันที่</th>
                  <th style="text-align: center">ผู้ดำเนินการ</th>
                  <th style="text-align: center"><input type="checkbox" id="chkOut" name="chkOut"/></th>

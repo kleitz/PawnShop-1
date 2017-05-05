@@ -93,10 +93,12 @@
                         $('#tableData tbody').append(
                         "<tr>" +
                             "<td style='text-align:center'>" + (i + 1) + "</td>" +
-                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
                             "<td style='text-align:center'>" + data[i].BookNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
-                            "<td style='text-align:center'>" + data[i].CreatedDate + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].PeriodNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].Amount + "</td>" +
                             "<td style='text-align:center'>" + "<input id='FirstEstimate' type='text' name='firstEstimate' class='uk-form-width-medium' value='" + data[i].FirstEstimate + "' />" + "</td>" +
                             "<td style='text-align:center'>" + data[i].SecondEstimate + "</td>" +
@@ -129,10 +131,12 @@
                         $('#tableData tbody').append(
                         "<tr>" +
                             "<td style='text-align:center'>" + (i + 1) + "</td>" +
-                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
                             "<td style='text-align:center'>" + data[i].BookNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
-                            "<td style='text-align:center'>" + data[i].CreatedDate + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].PeriodNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].Amount + "</td>" +
                             "<td style='text-align:center'>" + "<input id='FirstEstimate' type='text' name='firstEstimate' class='uk-form-width-medium' value='" + data[i].FirstEstimate + "' />" + "</td>" +
                             "<td style='text-align:center'>" + data[i].SecondEstimate + "</td>" +
@@ -361,12 +365,14 @@
                 <thead>
                     <tr>
                         <td style="text-align: center">ลำดับ</td>
-                        <td style="text-align: center">ตั๋ว</td>
+                        <td style="text-align: center;display:none">ตั๋ว</td>
                         <td style="text-align: center">เล่มที่</td>
                         <td style="text-align: center">เลขที่</td>
+                        <td style="text-align: center">ปี</td>
                         <td style="text-align: center">เดือน</td>
+                        <td style="text-align: center">งวด</td>
                         <td style="text-align: center">ราคารับจำนำ</td>
-                        <td style="text-align: center">ประเมินราคาครั้งที่หนึ่ง</td>
+                        <td style="text-align: center">ประเมินราคาโดยผู้จัดการสาขา</td>
                         <td style="text-align: center">ประเมินราคาครั้งที่สอง</td>
                         <td style="text-align: center; display: none">ReportNo</td>
                         <td style="text-align: center">รายละเอียดตั๋ว</td>
