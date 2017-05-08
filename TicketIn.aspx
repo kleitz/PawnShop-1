@@ -29,14 +29,7 @@
             loadYear();
             loadMonth();
             
-            //loadActivity();
-
-            //if ($('#checkEvent').is(':checked')) {
-            //    loadActivity();
-            //} else {
-
-            //}
-            
+            //to do filter
             $('#checkEvent').change(function () {
                 var chk = this.checked ? loadActivity() : '';
             });
