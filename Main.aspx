@@ -86,6 +86,14 @@
                 $('#loadingmessageMain').hide();
             });
 
+            $('#estimateManager').click(function () {
+                $('#loadingmessageMain').show();
+                $(this).addClass('uk-active');
+                $('li').not($(this)).removeClass('uk-active');
+                $('#content').load("DefaultManager.aspx");
+                $('#loadingmessageMain').hide();
+            });
+
         });
     </script>
 </head>
@@ -100,7 +108,8 @@
         <div class="uk-width-1-5">
             <ul class="uk-tab uk-tab-left uk-width-medium-1-1">
                 <li id="TicketIn"><a>เอาตั๋วเข้ากิจกรรม</a></li>
-                <li id="estimate"><a>ประเมินราคาตั๋ว</a></li>
+                <li id="estimateManager"><a>ประเมินราคาตั๋วโดยผู้จัดการ</a></li>
+                <li id="estimate"><a>ประเมินราคาตั๋วโดยกรรมการ</a></li>
                 <li id="listall"><a>รายการทรัพย์หลุดทั้งหมด</a></li>
                 <li id="manage"><a>จัดชุด</a></li>
                 <li id="managetray"><a>จัดถาด</a></li>

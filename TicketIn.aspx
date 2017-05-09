@@ -28,10 +28,11 @@
 
             loadYear();
             loadMonth();
+            loadActivityComming();
             
             //to do filter
             $('#checkEvent').change(function () {
-                var chk = this.checked ? loadActivity() : '';
+                var chk = this.checked ? loadActivity() : loadActivityComming();
             });
 
             $('#ddlMonths').change(function () {
@@ -176,6 +177,26 @@
             $.ajax({
                 type: "POST",
                 url: "ajax/PopualteEvent.aspx",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var ddlEvent = $('#ddlEvent');
+                    ddlEvent.empty().append('<option selected="selected" value="">กรุณาเลือกกิจกรรม</option>');
+                    $.each(data, function (key, value) {
+                        ddlEvent.append($("<option></option>").val(value.EventID).html(value.Detail));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+        
+        function loadActivityComming() {
+            $.ajax({
+                type: "POST",
+                url: "ajax/PopualteEventComming.aspx",
                 contentType: "application/json; charset=utf-8",
                 data: {},
                 dataType: "json",

@@ -27,7 +27,15 @@
         $(document).ready(function () {
             $('#panelEvent').hide();
             $('#lblChooseActivity').hide();
+            loadYear();
+            loadMonth();
 
+            $('#ddlMonths').change(function () {
+                var month = $('#ddlMonths').val();
+                var year = $('#ddlyears').val();
+                LoadPeriod(month, year);
+            });
+            
 
             $('#ddlSelect').change(function () {
                 var branchId = $('#hiddenBranch').val();
@@ -35,12 +43,14 @@
                 switch (option) {
                     case "all":
                         $('#panelEvent').hide();
+                        $('#panelPeriod').show();
                         $('#lblChooseActivity').hide();
                         LoadAllInBranch();
                         break;
                     case "byevt":
                         $('#tableData tbody').empty();
                         $('#panelEvent').show();
+                        $('#panelPeriod').hide();
                         $('#lblChooseActivity').show();
                         LoadDataByEventByBranchDropDown();
                         break;
@@ -132,8 +142,9 @@
                         "<tr>" +
                             "<td style='text-align:center'>" + (i + 1) + "</td>" +
                             "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
-                            "<td style='text-align:center'>" + data[i].BookNo + "</td>" +
-                            "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].BookNo + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].BookNo + "/"+  data[i].TicketNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
                             "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
                             "<td style='text-align:center'>" + data[i].PeriodNo + "</td>" +
@@ -316,6 +327,68 @@
             }
         }
 
+        function loadYear() {
+            $.ajax({
+                type: "POST",
+                url: "ajax/LoadYear.aspx",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var ddlyears = $('#ddlyears');
+                    ddlyears.empty().append('<option selected="selected" value="">กรุณาเลือกปี</option>');
+                    $.each(data, function (key, value) {
+                        ddlyears.append($("<option></option>").val(value.periodYear).html(value.periodThaiYear));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+        function loadMonth() {
+            $.ajax({
+                type: "POST",
+                url: "ajax/LoadMonth.aspx",
+                contentType: "application/json; charset=utf-8",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    var ddlMonths = $('#ddlMonths');
+                    ddlMonths.empty().append('<option selected="selected" value="">กรุณาเลือกเดือน</option>');
+                    $.each(data, function (key, value) {
+                        ddlMonths.append($("<option></option>").val(value.periodMonth).html(value.monthThai));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+        function LoadPeriod(month, year) {
+
+            data = "month=" + month + "&year=" + year;
+            $.ajax({
+                url: "ajax/LoadPeriod2.aspx",
+                contentType: "application/json; charset=utf-8",
+                data: data,
+                dataType: "json",
+                success: function (data) {
+                    var ddlPeriod = $('#ddlPeriod');
+                    ddlPeriod.empty().append('<option selected="selected" value="">กรุณาเลือกงวด</option>');
+                    $.each(data, function (key, value) {
+                        ddlPeriod.append($("<option></option>").val(value.PeriodNo).html(value.PeriodNo));
+                    });
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+
     </script>
 </head>
 <body>
@@ -352,6 +425,19 @@
                        </div>
                    </td>
                </tr>
+               <tr>
+                   <td></td>
+                   <td>
+                       <div id="panelPeriod">
+                           <b>ปี</b>
+                           <select id="ddlyears" name="Dropdownyear"></select>
+                           <b>เดือน</b>
+                           <select id="ddlMonths" name="DropdownMonth"></select>
+                           <b>งวด</b>
+                           <select id="ddlPeriod" name="DropdownPeriod"></select>
+                       </div>
+                   </td>
+               </tr>
            </table>
 
         </div>
@@ -364,19 +450,20 @@
             <table id="tableData" class="uk-table" border="1">
                 <thead>
                     <tr>
-                        <td style="text-align: center">ลำดับ</td>
+                        <td style="text-align: center"><b>ลำดับ</b></td>
                         <td style="text-align: center;display:none">ตั๋ว</td>
-                        <td style="text-align: center">เล่มที่</td>
-                        <td style="text-align: center">เลขที่</td>
-                        <td style="text-align: center">ปี</td>
-                        <td style="text-align: center">เดือน</td>
-                        <td style="text-align: center">งวด</td>
-                        <td style="text-align: center">ราคารับจำนำ</td>
-                        <td style="text-align: center">ประเมินราคาโดยผู้จัดการสาขา</td>
-                        <td style="text-align: center">ประเมินราคาครั้งที่สอง</td>
+                        <td style="text-align: center;display:none">เล่มที่</td>
+                        <td style="text-align: center;display:none">เลขที่</td>
+                        <td style="text-align: center"><b>เล่มที่/เลขที่</b></td>
+                        <td style="text-align: center"><b>ปี</b></td>
+                        <td style="text-align: center"><b>เดือน</b></td>
+                        <td style="text-align: center"><b>งวด</b></td>
+                        <td style="text-align: center"><b>ราคารับจำนำ</b></td>
+                        <td style="text-align: center"><b>ประเมินราคาโดยผู้จัดการสาขา</b></td>
+                        <td style="text-align: center"><b>ประเมินราคาโดยกรรมการ</b></td>
                         <td style="text-align: center; display: none">ReportNo</td>
-                        <td style="text-align: center">รายละเอียดตั๋ว</td>
-                        <td style="text-align: center">ประวัติการประเมิน</td>
+                        <td style="text-align: center"><b>รายละเอียดตั๋ว</b></td>
+                        <td style="text-align: center"><b>ประวัติการประเมิน</b></td>
                     </tr>
                 </thead>
                 <tbody>

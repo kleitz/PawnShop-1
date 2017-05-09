@@ -1158,6 +1158,30 @@ Namespace DataConnection
         End Function
 
 
+        Public Shared Function getEventCommingToDropdown() As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_getEventComming"""
+            cmd.Parameters.Add(New OracleParameter("TicketInfo", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+
+        End Function
+
+
         Public Shared Function AddTray(ByVal vid As String, ByVal TrayNo As Integer, ByVal productGroupId As Integer, ByVal amt As Decimal, ByVal estimate As Decimal, ByVal branchId As Integer, ByVal username As String, ByVal eventId As String) As Boolean
             Dim dt As New DataTable
             Dim da As New OracleDataAdapter
