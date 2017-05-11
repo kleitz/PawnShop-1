@@ -784,6 +784,37 @@ Namespace DataConnection
 
             Return dt
         End Function
+
+        Public Shared Function getAssetFallDBbyPeriod(ByVal Branchid As Integer, ByVal RoldID As Integer, ByVal month As String, ByVal year As String, ByVal period As Integer) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getPwAssetConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_getAssetFallByPeriod"""
+            cmd.Parameters.Add(New OracleParameter("vBranchId", OracleDbType.Int32)).Value = Branchid
+            cmd.Parameters.Add(New OracleParameter("vRoleID", OracleDbType.Int32)).Value = RoldID
+            cmd.Parameters.Add(New OracleParameter("vMonth", OracleDbType.Varchar2)).Value = month
+            cmd.Parameters.Add(New OracleParameter("vYear", OracleDbType.Varchar2)).Value = year
+            cmd.Parameters.Add(New OracleParameter("vPeriod", OracleDbType.Int32)).Value = period
+            cmd.Parameters.Add(New OracleParameter("cur", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+        End Function
+
+
+
+
         Public Shared Function updateBothEstimateTicket(ByVal firstEstimate As Decimal, ByVal secondEstimate As Decimal, ByVal ticketID As String, ByVal reportNo As Integer) As Boolean
             Dim dt As New DataTable
             Dim da As New OracleDataAdapter

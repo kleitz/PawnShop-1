@@ -37,6 +37,14 @@
             });
             
 
+            $('#ddlPeriod').change(function () {
+                var year = $('#ddlyears').val();
+                var month = $('#ddlMonths').val();
+                var period = $('#ddlPeriod').val();
+                
+                LoadAllInBranchPeriod(year, month, period);
+            });
+
             $('#ddlSelect').change(function () {
                 var branchId = $('#hiddenBranch').val();
                 var option = $('#ddlSelect option:selected').val();
@@ -145,6 +153,44 @@
                             "<td style='text-align:center;display:none'>" + data[i].BookNo + "</td>" +
                             "<td style='text-align:center;display:none'>" + data[i].TicketNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].BookNo + "/"+  data[i].TicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
+                            "<td style='text-align:center'>" + data[i].PeriodNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Amount + "</td>" +
+                            "<td style='text-align:center'>" + "<input id='FirstEstimate' type='text' name='firstEstimate' class='uk-form-width-medium' value='" + data[i].FirstEstimate + "' />" + "</td>" +
+                            "<td style='text-align:center'>" + data[i].SecondEstimate + "</td>" +
+                            "<td style='text-align:center;display:none;' class='reportNo' >" + data[i].ReportNo + "</td>" +
+                            "<td style='text-align:center'><input type='button' value='รายละเอียด' style='color:#ffffff' class='uk-button uk-button-primary' onclick=\"getTicketDetail('" + data[i].TicketId + "')\"/> </td>" +
+                            "<td style='text-align:center'><input type='button' value='ประวัติการประเมิน' style='color:#ffffff' class='uk-button uk-button-success' onclick=\"getEstimatDetail('" + data[i].TicketId + "')\"/> </td>" +
+                        "</tr>"
+                         );
+                    }
+                    $('#loading').hide();
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+        function LoadAllInBranchPeriod(year, month, period) {
+            data = "year=" + year + "&month=" + month + "&period=" + period; 
+            $('#loading').show();
+            $.ajax({
+                type: "POST",
+                url: "ajax/Default4.aspx",
+                data: data ,
+                dataType: "json",
+                success: function (data) {
+                    $('#tableData tbody').empty();
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableData tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + (i + 1) + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].BookNo + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].BookNo + "/" + data[i].TicketNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
                             "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
                             "<td style='text-align:center'>" + data[i].PeriodNo + "</td>" +
