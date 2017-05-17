@@ -53,7 +53,7 @@ Namespace DataConnection
             cmd.Connection = con
             cmd.CommandType = CommandType.StoredProcedure
             cmd.CommandText = """sp_TicketInfoDetail"""
-            cmd.Parameters.Add(New OracleParameter("TicketTypeId ", OracleDbType.Varchar2)).Value = ticketID
+            cmd.Parameters.Add(New OracleParameter("TicketID ", OracleDbType.Varchar2)).Value = ticketID
             cmd.Parameters.Add(New OracleParameter("TicketInfo", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
 
             Try
@@ -67,6 +67,31 @@ Namespace DataConnection
 
             Return dt
         End Function
+
+        Public Shared Function getTicketInfoHeader(ByVal ticketID As String) As DataTable
+            Dim dt As New DataTable
+            Dim da As New OracleDataAdapter
+            Dim con As New OracleConnection
+            Dim cmd As New OracleCommand
+            con = getConnection()
+            cmd.Connection = con
+            cmd.CommandType = CommandType.StoredProcedure
+            cmd.CommandText = """sp_TicketInfoHeader"""
+            cmd.Parameters.Add(New OracleParameter("TicketID ", OracleDbType.Varchar2)).Value = ticketID
+            cmd.Parameters.Add(New OracleParameter("TicketInfo", OracleDbType.RefCursor)).Direction = ParameterDirection.Output
+
+            Try
+                da.SelectCommand = cmd
+                da.Fill(dt)
+            Catch ex As Exception
+
+            Finally
+                con.Close()
+            End Try
+
+            Return dt
+        End Function
+
         Public Shared Function getEstimateLog(ByVal ticketID As String) As DataTable
             Dim dt As New DataTable
             Dim da As New OracleDataAdapter
@@ -903,6 +928,7 @@ Namespace DataConnection
                 Return True
 
             Catch ex As Exception
+                HttpContext.Current.Response.Write(ex.ToString)
                 Return False
             End Try
             con.Close()

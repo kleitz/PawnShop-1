@@ -111,8 +111,8 @@
                         $('#tableData tbody').append(
                         "<tr>" +
                             "<td style='text-align:center'>" + (i + 1) + "</td>" +
-                            "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
-                            "<td style='text-align:center'>" + data[i].BookNo + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketId +"</td>" +
+                            "<td style='text-align:center'>" + data[i].BookNo + "/" + data[i].TicketNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].TicketNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].periodThaiYearAsset + "</td>" +
                             "<td style='text-align:center'>" + data[i].monthThaiAsset + "</td>" +
@@ -246,8 +246,8 @@
                 //var CreateDate = currentRow.find("td:eq(4)").text();
                 var Amount = currentRow.find("td:eq(5)").text();
                 var FirstEstimate = currentRow.find('input[name=firstEstimate]').val();
-                var SecondEstimate = currentRow.find("td:eq(7)").text();
-                var ReportNo = currentRow.find("td:eq(8)").text();
+                var SecondEstimate = currentRow.find("td:eq(10)").text();
+                var ReportNo = currentRow.find("td:eq(11)").text();
 
                 var obj = {};
                 obj.id = id;
@@ -304,8 +304,68 @@
             return false; 
         }
 
-        function getTicketDetail(TicketID) {
+        function getTicketHeader(TicketId) {
+            data = "TicketId=" + TicketId;
+            $.ajax({
+                url: "ajax/DetailTicketHeader.aspx",
+                data: data,
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#tableDatailHeader tbody').empty();
 
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableDatailHeader tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + data[i].BookNoTicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].FullName + "</td>" +
+                            "<td style='text-align:center'>" + data[i].EmpolyeeName + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Amount + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodDay + " " + data[i].monthThai + " " + data[i].ThaiYear +  "</td>" +
+                            "<td style='text-align:center'>" + data[i].FirstEstimate + "</td>" +
+                            "<td style='text-align:center'>" + data[i].SecondEstimate + "</td>" +
+                        "</tr>"
+                         );
+                    }
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+        function getTicketHeaderForEstimateDetail(TicketId) {
+            data = "TicketId=" + TicketId;
+            $.ajax({
+                url: "ajax/DetailTicketHeader.aspx",
+                data: data,
+                method: "POST",
+                dataType: "json",
+                success: function (data) {
+                    $('#tableEstimateDetailHeader tbody').empty();
+
+                    for (i = 0 ; i < data.length; i++) {
+                        $('#tableEstimateDetailHeader tbody').append(
+                        "<tr>" +
+                            "<td style='text-align:center'>" + data[i].BookNoTicketNo + "</td>" +
+                            "<td style='text-align:center'>" + data[i].FullName + "</td>" +
+                            "<td style='text-align:center'>" + data[i].EmpolyeeName + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Amount + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodDay + " " + data[i].monthThai + " " + data[i].ThaiYear + "</td>" +
+                            "<td style='text-align:center'>" + data[i].FirstEstimate + "</td>" +
+                            "<td style='text-align:center'>" + data[i].SecondEstimate + "</td>" +
+                        "</tr>"
+                         );
+                    }
+                },
+                error: function ajaxError(result) {
+                    alert(result.status + ":" + result.statusText);
+                }
+            });
+        }
+
+
+        function getTicketDetail(TicketID) {
+            getTicketHeader(TicketID);
             data = "TicketID=" + TicketID;
             $.ajax({
                 url: "ajax/DetailTicket.aspx",
@@ -321,10 +381,15 @@
                             "<td style='text-align:center'>" + data[i].TicketLine + "</td>" +
                             "<td style='text-align:center'>" + data[i].Name + "</td>" +
                             "<td style='text-align:center'>" + data[i].Description + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Weight + "</td>" +
+                            "<td style='text-align:center'>" + data[i].Brand + "</td>" +
+                            "<td style='text-align:center'>" + data[i].SerialNo + "</td>" +
                             "<td style='text-align:center'>" + data[i].Quantity + "</td>" +
                         "</tr>"
                          );
                     }
+
+                    
                     AlertModal("modalDetail");
                 },
                 error: function ajaxError(result) {
@@ -334,6 +399,8 @@
             });
         }
         function getEstimatDetail(TicketID) {
+
+            getTicketHeaderForEstimateDetail(TicketID);
             data = "TicketID=" + TicketID;
             $.ajax({
                 url: "ajax/DetailEstimateLog.aspx",
@@ -345,11 +412,12 @@
                     for (i = 0 ; i < data.length; i++) {
                         $('#tableEstimateDetail tbody').append(
                         "<tr>" +
+                            "<td style='text-align:center'>" + (i + 1) + "</td>" +
                             "<td style='text-align:center'>" + data[i].EstimateNo + "</td>" +
-                            "<td style='text-align:center'>" + data[i].TicketId + "</td>" +
+                            "<td style='text-align:center;display:none'>" + data[i].TicketId + "</td>" +
                             "<td style='text-align:center'>" + data[i].Price + "</td>" +
                             "<td style='text-align:center'>" + data[i].UserName + "</td>" +
-                            "<td style='text-align:center'>" + data[i].DateCreated + "</td>" +
+                            "<td style='text-align:center'>" + data[i].periodDay + " " + data[i].monthThai + " " + data[i].ThaiYear + "</td>" +
                         "</tr>"
                          );
                     }
@@ -524,21 +592,52 @@
         <div class="uk-modal" id="modalDetail">
             <div class="uk-modal-dialog">
                 <div class="uk-modal-header uk-alert-success">รายละเอียดตั๋ว</div>
+
+                <div id="detailTicketHeader">
+                    <table id="tableDatailHeader" class="uk-table" border ="1">
+                        <thead>
+                            <tr>
+                                <td style="text-align: center"><b>เล่มที่/เลขที่</b>
+                                </td>
+                                <td style="text-align: center"><b>ชื่อลูกค้า</b>
+                                </td>
+                                <td style="text-align: center"><b>พนักงานรับจำนำ</b>
+                                </td>
+                                <td style="text-align: center"><b>ราคารับจำนำ</b>
+                                </td>
+                                <td style="text-align: center"><b>วันที่รับจำนำ</b>
+                                </td>
+                                <td style="text-align: center"><b>ราคาประเมินครั้งที่ 1(ล่าสุด) </b>
+                                </td>
+                                <td style="text-align: center"><b>ราคาประเมินครั้งที่ 2(ล่าสุด)</b>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="uk-modal-header uk-alert-success">ของภายในตั๋ว</div>
+
                 <div id="detailTicket">
                      <table id="tableDetail" class="uk-table" border="1">
                          <thead>
                              <tr>
-                                 <td style="text-align: center">
-                                     ลำดับ
+                                 <td style="text-align: center"><b>ลำดับ</b>
                                  </td>
-                                 <td style="text-align: center">
-                                     ประเภท
+                                 <td style="text-align: center"><b>ประเภททรัพย์</b>
                                  </td>
-                                 <td style="text-align: center">
-                                     รายละเอียด
+                                 <td style="text-align: center"><b>รายละเอียด</b>
                                  </td>
-                                 <td style="text-align: center">
-                                     จำนวน
+                                 <td style="text-align: center"><b>น้ำหนัก</b>
+                                 </td>
+                                 <td style="text-align: center"><b>ยี่ห้อ</b>
+                                 </td>
+                                 <td style="text-align: center"><b>เลขเครื่อง</b>
+                                 </td>
+                                 <td style="text-align: center"><b>จำนวนสิ่ง</b>
                                  </td>
                              </tr>
                          </thead>
@@ -550,27 +649,55 @@
             </div>
         </div>
 
+
+<%--        ประวัติการประเมิน--%>
         <div class="uk-modal" id="modalEstimatelog">
             <div class="uk-modal-dialog">
                 <div class="uk-modal-header uk-alert-success">รายละเอียดตั๋ว</div>
+
+                <div id="detailOfTicketinEstimate">
+                    <table id="tableEstimateDetailHeader" class="uk-table" border="1">
+                        <thead>
+                            <tr>
+                                <td style="text-align: center"><b>เล่มที่/เลขที่</b>
+                                </td>
+                                <td style="text-align: center"><b>ชื่อลูกค้า</b>
+                                </td>
+                                <td style="text-align: center"><b>พนักงานรับจำนำ</b>
+                                </td>
+                                <td style="text-align: center"><b>ราคารับจำนำ</b>
+                                </td>
+                                <td style="text-align: center"><b>วันที่รับจำนำ</b>
+                                </td>
+                                <td style="text-align: center"><b>ราคาประเมินครั้งที่ 1(ล่าสุด) </b>
+                                </td>
+                                <td style="text-align: center"><b>ราคาประเมินครั้งที่ 2(ล่าสุด)</b>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="uk-modal-header uk-alert-success">รายละเอียดการประเมิน</div>
+
                 <div id="detailTicketEstimate">
                      <table id="tableEstimateDetail" class="uk-table" border="1">
                          <thead>
                              <tr>
-                                 <td style="text-align: center">
-                                    ประเมินครั้งที่
+                                 <td style="text-align: center"><b>ลำดับ</b>
                                  </td>
-                                 <td style="text-align: center">
-                                     ตั๋ว
+                                 <td style="text-align: center"><b>ประเมินครั้งที่</b>
                                  </td>
-                                 <td style="text-align: center">
-                                     ราคา
+                                 <td style="text-align: center; display: none"><b>ตั๋ว</b>
                                  </td>
-                                 <td style="text-align: center">
-                                     ผู้ประเมิน
+                                 <td style="text-align: center"><b>ราคา</b>
                                  </td>
-                                 <td style="text-align: center">
-                                     วันที่
+                                 <td style="text-align: center"><b>ผู้ทำการประเมิน</b>
+                                 </td>
+                                 <td style="text-align: center"><b>วันที่ทำการประเมิน</b>
                                  </td>
                              </tr>
                          </thead>
@@ -581,6 +708,7 @@
                 </div>
             </div>
         </div>
+<%--        จบประวัติการประเมิน--%>
 
         <div class="uk-modal" id="modalSecret">
             <div class="uk-modal-dialog">
@@ -609,14 +737,12 @@
             </div>
         </div>
 
-
         <div class="uk-modal" id="modalAlertSuccess">
             <div class="uk-modal-dialog">
                 <div class="uk-modal-header uk-alert-success">แจ้งเตือน</div>
                 <asp:Label ID="lblAlert" runat="server"></asp:Label>
             </div>
         </div>
-
 
     </form>
 </body>
